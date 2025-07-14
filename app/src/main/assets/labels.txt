@@ -1,0 +1,7 @@
+Manholes
+Potholes
+Puddle
+Road-cracks
+Speed-bumps
+Uneven-terrain
+Unfinished-pavements

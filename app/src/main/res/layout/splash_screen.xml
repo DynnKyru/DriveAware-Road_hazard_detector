@@ -25,27 +25,28 @@
         android:max="100"
         android:progress="0"
         android:layout_centerInParent="true" />
+
     <TextView
         android:id="@+id/tagline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sweet Ride Home"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:layout_below="@id/appLogo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:alpha="0.0" />
+        android:alpha="0.0"
+        android:text="DriveAware"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
     <!-- Loading Text -->
     <TextView
         android:id="@+id/loadingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading..."
-        android:textSize="18sp"
-        android:textColor="@color/black"
         android:layout_below="@id/progressBar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:alpha="0.0"/>
+        android:alpha="0.0"
+        android:text="Loading..."
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 </RelativeLayout>

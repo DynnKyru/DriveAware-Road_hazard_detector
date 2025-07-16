@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     private var imageAnalyzer: ImageAnalysis? = null
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
-    private var isNotificationEnabled = true // Default is ON
+    private var isNotificationEnabled = true // Default is ON (this should be changed)
     private var detector: Detector? = null
     private var reportImageView: ImageView? = null
     private var profileImageView: ImageView? = null
@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity() {
 
     // Enum class for severity levels
     enum class Severity(val color: Int) {
+        LOWER(R.color.green),
         LOW(R.color.yellow),
         MEDIUM(R.color.orange),
         HIGH(R.color.red)
@@ -405,7 +406,7 @@ class MainActivity : AppCompatActivity() {
         return when (detection) {
             "Manholes", "Road-cracks" -> Severity.LOW
             "Uneven-terrain", "Speed-Bumps" -> Severity.MEDIUM
-            "Unfinished-pavements", "Potholes", "Puddle" -> Severity.HIGH
+            "Potholes", "Puddle" -> Severity.HIGH
             else -> Severity.LOW
         }
     }

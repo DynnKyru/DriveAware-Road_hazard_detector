@@ -22,7 +22,8 @@ class SplashActivity : AppCompatActivity() {
         "Analyzing objects...",
         "Preparing the Application...",
         "Calibrating sensors...",
-        "Verifying road safety..."
+        "Verifying road safety...",
+        "Ginugulpi si michael..."
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +32,10 @@ class SplashActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // ✅ Check if user is already logged in
+        // Check if user is already logged in
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            // 🎯 Already logged in – skip login screen
+            // Already logged in – skip login screen
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
@@ -75,7 +76,7 @@ class SplashActivity : AppCompatActivity() {
                     progressBar.progress = progress
                     handler.postDelayed(this, 60) // Smooth interval (~6s total)
                 } else {
-                    // 🧑‍💼 Go to login/signup if not logged in
+                    //  Go to login/signup if not logged in
                     val intent = Intent(this@SplashActivity, LoginNSignup::class.java)
                     intent.putExtra("showSignup", false)
                     startActivity(intent)

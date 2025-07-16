@@ -58,7 +58,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             when (result.clsName) {
                 "Manholes", "Road-cracks" -> boxPaint.color = Color.YELLOW
                 "Uneven-terrain", "Speed-Bumps" -> boxPaint.color = Color.rgb(255, 165, 0) // Orange
-                "Unfinished-pavements", "Potholes", "Puddle" -> boxPaint.color = Color.RED
+                "Potholes", "Puddle" -> boxPaint.color = Color.RED
                 else -> boxPaint.color = Color.WHITE
             }
 

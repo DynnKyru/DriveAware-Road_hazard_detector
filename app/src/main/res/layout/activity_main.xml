@@ -18,7 +18,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:scaleType="fitCenter"/>
+        app:scaleType="fillCenter"
+		app:implementationMode="performance"/>
 
     <!-- Notification Card (Overlay) -->
     <androidx.cardview.widget.CardView
@@ -65,8 +66,7 @@
         app:layout_constraintTop_toTopOf="@id/view_finder"
         app:layout_constraintBottom_toBottomOf="@id/view_finder"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintDimensionRatio="3:4"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Inference Speed Display -->
     <LinearLayout

@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
     // CardView and TextView for heads-up notification
     private lateinit var notificationBanner: CardView
     private lateinit var notificationText: TextView
+    private lateinit var notificationBackground: CardView
     private val locationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -133,6 +134,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // detecting... bg
+        setContentView(R.layout.activity_main)
+        notificationBackground = findViewById(R.id.notificationBackground)
+        notificationBackground.alpha = 1f
+        notificationBackground.visibility = View.VISIBLE
+
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -480,6 +488,7 @@ class MainActivity : AppCompatActivity() {
             vibrator.vibrate(vibrationEffect)
         }
     }
+
     fun onEmptyDetect() {
         runOnUiThread {
             hideNotification()
@@ -534,6 +543,7 @@ class MainActivity : AppCompatActivity() {
    }
 
     private fun hideNotification() {
+        //bannersssgrgrgr
         notificationBanner.animate()
             .alpha(0f)
             .setDuration(1000)

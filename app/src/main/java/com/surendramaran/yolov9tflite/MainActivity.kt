@@ -122,10 +122,10 @@ class MainActivity : AppCompatActivity() {
 
     // Enum class for severity levels
     enum class Severity(val color: Int) {
-        LOWER(R.color.green),
-        LOW(R.color.yellow),
-        MEDIUM(R.color.orange),
-        HIGH(R.color.red)
+        LOW(R.color.green),
+        MEDIUM(R.color.yellow),
+        HIGH(R.color.orange),
+        CRITICAL(R.color.red)
     }
 
     private var mediaPlayer: MediaPlayer? = null
@@ -404,9 +404,10 @@ class MainActivity : AppCompatActivity() {
     // Mapping detected objects to severity levels
     private fun getSeverity(detection: String): Severity {
         return when (detection) {
-            "Manholes", "Road-cracks" -> Severity.LOW
-            "Uneven-terrain", "Speed-Bumps" -> Severity.MEDIUM
-            "Potholes", "Puddle" -> Severity.HIGH
+            "Uneven-terrain", "Road-cracks" -> Severity.LOW
+            "Speed-Bumps" -> Severity.MEDIUM
+            "Manholes", "Puddle" -> Severity.HIGH
+            "Potholes" -> Severity.CRITICAL
             else -> Severity.LOW
         }
     }
@@ -501,7 +502,7 @@ class MainActivity : AppCompatActivity() {
         notificationBanner.setCardBackgroundColor(ContextCompat.getColor(this, severity.color))
         notificationText.text = detection
         notificationBanner.visibility = View.VISIBLE
-        notificationBanner.animate().translationY(0f).setDuration(300).start()
+        notificationBanner.animate().translationY(0f).setDuration(2000).start()
 
     }
 

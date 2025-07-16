@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Matrix
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.location.Geocoder
 import android.net.Uri
@@ -19,7 +18,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
@@ -56,7 +54,6 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ToggleButton
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -72,8 +69,8 @@ import java.util.Date
 import java.util.Locale
 import android.app.AlertDialog
 import android.content.Intent
-import android.view.LayoutInflater
 import android.media.MediaPlayer
+import android.view.animation.OvershootInterpolator
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 
@@ -82,7 +79,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var lastDetectionText = "Detecting"
-    private lateinit var mapManager: MapManager
     private val isFrontCamera = false
     private var preview: Preview? = null
     private var imageAnalyzer: ImageAnalysis? = null
@@ -124,10 +120,10 @@ class MainActivity : AppCompatActivity() {
 
     // Enum class for severity levels
     enum class Severity(val color: Int) {
-        LOW(R.color.green),
-        MEDIUM(R.color.yellow),
-        HIGH(R.color.orange),
-        CRITICAL(R.color.red)
+        LOW(R.color.light_green),
+        MEDIUM(R.color.light_yellow),
+        HIGH(R.color.light_orange),
+        CRITICAL(R.color.light_red)
     }
 
     private var mediaPlayer: MediaPlayer? = null
@@ -408,6 +404,16 @@ class MainActivity : AppCompatActivity() {
             else -> Severity.LOW
         }
     }
+
+    private fun getHazardIcon(detection: String): Int {
+        return when (detection) {
+            "Uneven-terrain", "Road-cracks"  -> R.drawable.ic_dia
+            "Speed-Bumps" -> R.drawable.ic_bump
+            "Manholes", "Puddle" -> R.drawable.ic_octa
+            "Potholes" -> R.drawable.ic_pothole
+            else -> R.drawable.ic_detecting
+        }
+    }
     private var lastDetectionTime = 0L
     private val detectionInterval = 4000 // Adjust time in milliseconds (e.g., 4000ms = 4 seconds)
 
@@ -484,6 +490,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var detectionIcon: ImageView
+
 
    private fun showNotification(detection: String) {
         Log.d("Notification", "isNotificationEnabled = $isNotificationEnabled")
@@ -492,23 +500,35 @@ class MainActivity : AppCompatActivity() {
             Log.d("Notification", "Notification blocked because isNotificationEnabled = false")
           return
         }
-
         val detectedClass = detection.split(" ")[0]
         val severity = getSeverity(detectedClass)
+
+        detectionIcon = findViewById(R.id.detectionIcon)
+        val iconRes = getHazardIcon(detectedClass)
+        detectionIcon.setImageResource(iconRes)
 
         notificationBanner.setCardBackgroundColor(ContextCompat.getColor(this, severity.color))
         notificationText.text = detection
         notificationBanner.alpha = 0f
         notificationBanner.visibility = View.VISIBLE
 
+       notificationBanner.apply {
+           scaleX = 0.7f
+           scaleY = 0.7f
+           alpha = 0f
+           visibility = View.VISIBLE
+       }
+
        notificationBanner.animate()
            .alpha(1f)
-           .setDuration(300)
+           .scaleX(1f)
+           .scaleY(1f)
+           .setInterpolator(OvershootInterpolator()) // This gives the bounce
+           .setDuration(400)
            .withEndAction {
-               // Automatically hide after 2 seconds
                notificationBanner.postDelayed({
                    hideNotification()
-               }, 2000)
+               }, 5000)
            }
            .start()
    }
@@ -516,7 +536,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideNotification() {
         notificationBanner.animate()
             .alpha(0f)
-            .setDuration(500)
+            .setDuration(1000)
             .withEndAction {
                 notificationBanner.visibility = View.GONE
             }

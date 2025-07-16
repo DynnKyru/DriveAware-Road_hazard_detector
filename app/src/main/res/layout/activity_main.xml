@@ -47,8 +47,8 @@
             android:id="@+id/detectionIcon"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_warning"
-            android:tint="@android:color/white"
+            android:src="@drawable/alert"
+            app:tint="@android:color/white"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="4dp"/>
 

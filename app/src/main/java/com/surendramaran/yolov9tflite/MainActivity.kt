@@ -508,7 +508,7 @@ class MainActivity : AppCompatActivity() {
                // Automatically hide after 2 seconds
                notificationBanner.postDelayed({
                    hideNotification()
-               }, 2000)
+               }, 5000)
            }
            .start()
    }
@@ -516,7 +516,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideNotification() {
         notificationBanner.animate()
             .alpha(0f)
-            .setDuration(500)
+            .setDuration(1000)
             .withEndAction {
                 notificationBanner.visibility = View.GONE
             }

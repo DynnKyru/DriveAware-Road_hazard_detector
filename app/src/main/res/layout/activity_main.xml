@@ -23,11 +23,10 @@
 
     <!-- Notification Card (Overlay) -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/detectionNotificationCard"
+      android:id="@+id/detectionNotificationCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:translationY="-200dp"
         android:visibility="gone"
         android:elevation="8dp"
         app:cardCornerRadius="12dp"
@@ -45,7 +44,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center"/>
-    </androidx.cardview.widget.CardView>
+	</androidx.cardview.widget.CardView>
 
     <!-- Frame Layout for Capturing -->
     <FrameLayout
@@ -56,6 +55,8 @@
         app:layout_constraintBottom_toBottomOf="@id/view_finder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+		
+	
 
     <!-- Overlay View for Object Detection -->
     <com.surendramaran.yolov9tflite.OverlayView

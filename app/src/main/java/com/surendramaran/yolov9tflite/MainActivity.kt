@@ -19,6 +19,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
@@ -71,6 +72,7 @@ import java.util.Date
 import java.util.Locale
 import android.app.AlertDialog
 import android.content.Intent
+import android.view.LayoutInflater
 import android.media.MediaPlayer
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
@@ -212,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         notificationText = findViewById(R.id.detectionNotificationText)
 
         // Dismiss notification on tap
-        notificationBanner.setOnClickListener {
+        findViewById<CardView>(R.id.detectionNotificationCard)?.setOnClickListener {
             hideNotification()
         }
 
@@ -365,11 +367,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-
-
-
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         if (it[Manifest.permission.CAMERA] == true) { startCamera() }
     }
@@ -435,13 +432,13 @@ class MainActivity : AppCompatActivity() {
                 val isAlertEnabled = sharedPreferences.getBoolean(ALERT_KEY, true)
 
                 // ✅ Play sound only if alerts are enabled AND severity is MEDIUM or HIGH
-                if (isAlertEnabled && (severity == Severity.MEDIUM || severity == Severity.HIGH)) {
+                if (isAlertEnabled && (severity == Severity.CRITICAL || severity == Severity.HIGH)) {
                     mediaPlayer?.start()
                 }
 
                 if (severity == Severity.HIGH) vibratePhone()
 
-                // Update UI
+                // Update UI (NEEEEEEEEED TOOOOOOO CHAAAAAAAAAANGHEE)
                 findViewById<TextView>(R.id.detectionResultTextMain)?.text = "Detecting: $detectionText"
                 detectionResultTextSheetView?.text = "Detecting: $detectionText"
                 lastDetectionText = "Detecting: $detectionText"
@@ -488,12 +485,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun showNotification(detection: String) {
+   private fun showNotification(detection: String) {
         Log.d("Notification", "isNotificationEnabled = $isNotificationEnabled")
 
-        if (!isNotificationEnabled) {
+       if (!isNotificationEnabled) {
             Log.d("Notification", "Notification blocked because isNotificationEnabled = false")
-            return
+          return
         }
 
         val detectedClass = detection.split(" ")[0]
@@ -501,20 +498,31 @@ class MainActivity : AppCompatActivity() {
 
         notificationBanner.setCardBackgroundColor(ContextCompat.getColor(this, severity.color))
         notificationText.text = detection
+        notificationBanner.alpha = 0f
         notificationBanner.visibility = View.VISIBLE
-        notificationBanner.animate().translationY(0f).setDuration(2000).start()
 
-    }
+       notificationBanner.animate()
+           .alpha(1f)
+           .setDuration(300)
+           .withEndAction {
+               // Automatically hide after 2 seconds
+               notificationBanner.postDelayed({
+                   hideNotification()
+               }, 2000)
+           }
+           .start()
+   }
 
     private fun hideNotification() {
         notificationBanner.animate()
-            .translationY(-200f)
-            .setDuration(300)
+            .alpha(0f)
+            .setDuration(500)
             .withEndAction {
                 notificationBanner.visibility = View.GONE
             }
             .start()
     }
+
 
 
     private fun toast(message: String) {

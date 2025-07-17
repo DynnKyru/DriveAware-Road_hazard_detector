@@ -1,5 +1,5 @@
 // ✅ Updated Detector.kt with Alert Mode filtering support
-package com.surendramaran.yolov9tflite
+package com.DynnKyru.driveAware
 
 import android.content.Context
 import android.graphics.Bitmap

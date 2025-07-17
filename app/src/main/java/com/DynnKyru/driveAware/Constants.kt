@@ -1,4 +1,4 @@
-package com.surendramaran.yolov9tflite
+package com.DynnKyru.driveAware
 
 object Constants {
     const val MODEL_PATH = "Latest-Model.tflite"

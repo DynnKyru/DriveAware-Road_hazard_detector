@@ -1,4 +1,4 @@
-package com.surendramaran.yolov9tflite
+package com.DynnKyru.driveAware
 
 import android.Manifest
 import android.app.Dialog
@@ -39,9 +39,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.surendramaran.yolov9tflite.Constants.LABELS_PATH
-import com.surendramaran.yolov9tflite.Constants.MODEL_PATH
-import com.surendramaran.yolov9tflite.databinding.ActivityMainBinding
+import com.DynnKyru.driveAware.Constants.LABELS_PATH
+import com.DynnKyru.driveAware.Constants.MODEL_PATH
+import com.DynnKyru.driveAware.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
@@ -533,11 +533,11 @@ class MainActivity : AppCompatActivity() {
            .scaleX(1f)
            .scaleY(1f)
            .setInterpolator(OvershootInterpolator()) // This gives the bounce
-           .setDuration(400)
+           .setDuration(300)
            .withEndAction {
                notificationBanner.postDelayed({
                    hideNotification()
-               }, 5000)
+               }, 1000)
            }
            .start()
    }
@@ -546,7 +546,7 @@ class MainActivity : AppCompatActivity() {
         //bannersssgrgrgr
         notificationBanner.animate()
             .alpha(0f)
-            .setDuration(1000)
+            .setDuration(6000)
             .withEndAction {
                 notificationBanner.visibility = View.GONE
             }

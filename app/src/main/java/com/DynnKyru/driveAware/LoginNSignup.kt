@@ -1,4 +1,4 @@
-package com.surendramaran.yolov9tflite
+package com.DynnKyru.driveAware
 
 import android.content.Intent
 import android.os.Bundle

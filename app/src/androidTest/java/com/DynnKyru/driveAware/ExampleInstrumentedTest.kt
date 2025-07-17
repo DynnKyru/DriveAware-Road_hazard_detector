@@ -1,4 +1,4 @@
-package com.surendramaran.yolov9tflite
+package com.DynnKyru.driveAware
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.surendramaran.yolov9tflite", appContext.packageName)
+        assertEquals("com.DynnKyru.driveAware", appContext.packageName)
     }
 }

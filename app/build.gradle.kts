@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.surendramaran.yolov9tflite"
+    namespace = "com.DynnKyru.driveAware"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.surendramaran.yolov9tflite"
+        applicationId = "com.DynnKyru.driveAware"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

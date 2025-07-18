@@ -1,7 +1,9 @@
 package com.DynnKyru.driveAware
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -15,11 +17,21 @@ class LoginNSignup : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Make status and nav bar transparent, layout extends full screen
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
+
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
         // Decide whether to show login or signup layout
         val showSignup = intent.getBooleanExtra("showSignup", false)
+
 
         if (showSignup) {
             setContentView(R.layout.signup)
@@ -29,6 +41,8 @@ class LoginNSignup : AppCompatActivity() {
             setupLogin()
         }
     }
+
+
 
     private fun setupLogin() {
         val emailField = findViewById<EditText>(R.id.emailField)
@@ -49,7 +63,7 @@ class LoginNSignup : AppCompatActivity() {
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
 
-                        // ✅ Navigate to MainActivity here
+                        // Navigate to MainActivity here
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish() // Optional: prevent returning to login on back press

@@ -3,6 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Bg image -->
+    <ImageView
+        android:id="@+id/splashBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/splash_bg"
+        android:layout_alignParentTop="true"/>
+
+    <!-- Black Overlay for Dimming -->
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#66000000"
+        android:visibility="visible"
+        android:clickable="false" />
+
 
     <!-- App Logo or Animation -->
     <ImageView
@@ -18,13 +37,14 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="250dp"
+        android:layout_width="359dp"
         android:layout_height="wrap_content"
         android:indeterminate="false"
         android:progressDrawable="@drawable/progress_bar_style"
         android:max="100"
         android:progress="0"
-        android:layout_centerInParent="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="650dp" />
 
     <TextView
         android:id="@+id/tagline"
@@ -32,11 +52,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appLogo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
         android:alpha="0.0"
-        android:text="DriveAware"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:text="DriveAware: The Hazard Avoidance App"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:gravity="center"/>
     <!-- Loading Text -->
     <TextView
         android:id="@+id/loadingText"
@@ -47,6 +68,6 @@
         android:layout_marginTop="10dp"
         android:alpha="0.0"
         android:text="Loading..."
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 </RelativeLayout>

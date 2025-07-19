@@ -783,6 +783,8 @@ class MainActivity : AppCompatActivity() {
         val alertModeLayout: LinearLayout? = dialog.findViewById(R.id.layoutAlertMode)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val helpLayout: LinearLayout? = dialog.findViewById(R.id.layoutHelp)
+        val profileLayout: LinearLayout? = dialog.findViewById(R.id.layoutProfile)
+        val reportLayout: LinearLayout? = dialog.findViewById(R.id.layoutReport)
 
         val alertSwitch: Switch = dialog.findViewById(R.id.alertSwitch)
         val notificationSwitch: Switch = dialog.findViewById(R.id.notificationSwitch)
@@ -803,7 +805,6 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showProfileMenuDialog()
         }
-
         reportLayout?.setOnClickListener {
             dialog.dismiss()
             showReportMenuDialog()

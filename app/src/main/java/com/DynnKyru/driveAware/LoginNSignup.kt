@@ -31,14 +31,17 @@ class LoginNSignup : AppCompatActivity() {
 
         // Decide whether to show login or signup layout
         val showSignup = intent.getBooleanExtra("showSignup", false)
-        
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // Optional: prevent returning to login on back press
+        /*
         if (showSignup) {
             setContentView(R.layout.signup)
             setupSignup()
         } else {
             setContentView(R.layout.login)
             setupLogin()
-        }
+        }*/
     }
 
     private fun setupLogin() {

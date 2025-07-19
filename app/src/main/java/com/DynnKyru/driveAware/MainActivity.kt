@@ -515,12 +515,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var detectionIcon: ImageView
 
 
-   private fun showNotification(detection: String) {
+    private fun showNotification(detection: String) {
         Log.d("Notification", "isNotificationEnabled = $isNotificationEnabled")
 
-       if (!isNotificationEnabled) {
+        if (!isNotificationEnabled) {
             Log.d("Notification", "Notification blocked because isNotificationEnabled = false")
-          return
+            return
         }
         val detectedClass = detection.split(" ")[0]
         val severity = getSeverity(detectedClass)
@@ -534,26 +534,26 @@ class MainActivity : AppCompatActivity() {
         notificationBanner.alpha = 0f
         notificationBanner.visibility = View.VISIBLE
 
-       notificationBanner.apply {
-           scaleX = 0.7f
-           scaleY = 0.7f
-           alpha = 0f
-           visibility = View.VISIBLE
-       }
+        notificationBanner.apply {
+            scaleX = 0.7f
+            scaleY = 0.7f
+            alpha = 0f
+            visibility = View.VISIBLE
+        }
 
-       notificationBanner.animate()
-           .alpha(1f)
-           .scaleX(1f)
-           .scaleY(1f)
-           .setInterpolator(OvershootInterpolator()) // This gives the bounce
-           .setDuration(300)
-           .withEndAction {
-               notificationBanner.postDelayed({
-                   hideNotification()
-               }, 1000)
-           }
-           .start()
-   }
+        notificationBanner.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setInterpolator(OvershootInterpolator()) // This gives the bounce
+            .setDuration(300)
+            .withEndAction {
+                notificationBanner.postDelayed({
+                    hideNotification()
+                }, 1000)
+            }
+            .start()
+    }
 
     private fun hideNotification() {
         //bannersssgrgrgr
@@ -694,14 +694,14 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText.isNullOrEmpty() && MapManager.isSearchActive()) {
-                        MapManager.resetToUserLocation(this@MainActivity, mapView, detectionRecords)
-                        MapManager.clearSearchState()
-                    }
-                    return true
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty() && MapManager.isSearchActive()) {
+                    MapManager.resetToUserLocation(this@MainActivity, mapView, detectionRecords)
+                    MapManager.clearSearchState()
                 }
-            })
+                return true
+            }
+        })
 
         val menuButton: FloatingActionButton? = dialog.findViewById(R.id.menuButton)
         menuButton?.setOnClickListener {
@@ -763,7 +763,7 @@ class MainActivity : AppCompatActivity() {
         alertSwitch: Switch,
         notificationSwitch: Switch,
 
-    ) {
+        ) {
         val alertEnabled = sharedPreferences.getBoolean(ALERT_KEY, false)
         val notificationsEnabled = sharedPreferences.getBoolean(NOTIFICATION_KEY, true)
 
@@ -917,11 +917,11 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
     private fun showAlertModeDialog() {
         val dialog = createDialog(R.layout.settings_alertmode)
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
-
         val roadCrackCheckbox = dialog.findViewById<CheckBox>(R.id.RoadcrackCheckbox)
         val roadPotholeCheckbox = dialog.findViewById<CheckBox>(R.id.RoadpotholeCheckbox)
         val speedBumpCheckbox = dialog.findViewById<CheckBox>(R.id.SpeedbumpCheckbox)
@@ -977,7 +977,6 @@ class MainActivity : AppCompatActivity() {
         val userDetailsLayout: LinearLayout? = dialog.findViewById(R.id.layoutuserdetails)
         val signOutLayout: LinearLayout? = dialog.findViewById(R.id.layoutsignout)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
-
         userDetailsLayout?.setOnClickListener {
             dialog.dismiss()
             showUserDetailsDialog()
@@ -1006,7 +1005,6 @@ class MainActivity : AppCompatActivity() {
             showSettingsMenuDialog()
         }
     }
-
 
     private fun showUserDetailsDialog() {
         val dialog = createDialog(R.layout.profile_userdetails)

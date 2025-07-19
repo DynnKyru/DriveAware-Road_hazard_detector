@@ -77,7 +77,7 @@ import java.text.SimpleDateFormat
 
 
 class MainActivity : AppCompatActivity() {
-
+//test change
     private lateinit var binding: ActivityMainBinding
     private var lastDetectionText = "Detecting"
     private val isFrontCamera = false

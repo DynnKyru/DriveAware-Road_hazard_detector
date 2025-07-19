@@ -564,16 +564,6 @@ class MainActivity : AppCompatActivity() {
             .start()
     }
 
-    // MAP BUTTON
-    private fun setupMapButton(btn: View) {
-        val mapButton = findViewById<MaterialCardView>(R.id.mapButton)
-        mapButton.setOnClickListener {
-            val intent = Intent(this, MapManager::class.java)
-            startActivity(intent)
-        }
-    }
-
-
 
     private fun toast(message: String) {
         lifecycleScope.launch(Dispatchers.Main) {
@@ -638,7 +628,7 @@ class MainActivity : AppCompatActivity() {
         detectionTextView?.text = lastDetectionText
 
         // Set initial user location
-        MapManager.clearSearchState()  // 👈 Add this right before setupMap
+        MapManager.clearSearchState()  // Add this right before setupMap
         loadReportedDetectionsFromFirebase {
             MapManager.setupMap(this, mapView, lat.toDouble(), lon.toDouble(), detectionRecords)
         }
@@ -993,7 +983,7 @@ class MainActivity : AppCompatActivity() {
         val timeText: TextView = dialog.findViewById(R.id.time)
         val dateText: TextView = dialog.findViewById(R.id.date)
 
-        // ✅ Auto-fill location
+        // Auto-fill location
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f)
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f)
         val geocoder = Geocoder(this, Locale.getDefault())
@@ -1010,7 +1000,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("Geocoder", "Failed to get address: ${e.message}", e)
         }
 
-        // ✅ Auto-fill date and time
+        // Auto-fill date and time
         val currentDate = java.text.SimpleDateFormat("MMMM dd yyyy", Locale.getDefault()).format(Date())
         val currentTime = java.text.SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date())
         dateText.text = currentDate
@@ -1047,7 +1037,7 @@ class MainActivity : AppCompatActivity() {
         val viewHistoryButton: Button = dialog.findViewById(R.id.ViewhistoryButton) // ✅ New line
 
         reportButton.setOnClickListener {
-            // ✅ Dynamically set hazard type from checkboxes
+            // Dynamically set hazard type from checkboxes
             val selectedTypes = mutableListOf<String>()
             if (roadCrackCheckBox.isChecked) selectedTypes.add("Road Crack")
             if (roadPotholeCheckBox.isChecked) selectedTypes.add("Pothole")
@@ -1077,7 +1067,7 @@ class MainActivity : AppCompatActivity() {
             showReportVerificationDialog(hazardType, location, time, date, bitmap)
         }
 
-        // ✅ View History Button Action
+        // View History Button Action
         viewHistoryButton.setOnClickListener {
             dialog.dismiss()
             showReportHistoryDialog()

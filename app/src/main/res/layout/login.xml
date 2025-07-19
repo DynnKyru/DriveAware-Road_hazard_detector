@@ -17,7 +17,7 @@
             android:padding="24dp"
             android:gravity="center_horizontal"
             android:layout_gravity="top"
-            android:layout_marginTop="32dp"> <!-- Adjusted upward -->
+            android:layout_marginTop="32dp">
 
             <!-- Logo and Title -->
             <ImageView
@@ -43,11 +43,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@color/white"
                 android:hint="Email/Username"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
-                android:textColorHint="#FFFFFF" />
+                android:textColorHint="@color/white" />
 
             <EditText
                 android:id="@+id/passwordField"

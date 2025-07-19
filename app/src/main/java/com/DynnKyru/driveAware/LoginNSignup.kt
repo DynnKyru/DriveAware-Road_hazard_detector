@@ -31,7 +31,6 @@ class LoginNSignup : AppCompatActivity() {
 
         // Decide whether to show login or signup layout
         val showSignup = intent.getBooleanExtra("showSignup", false)
-         
         
         if (showSignup) {
             setContentView(R.layout.signup)
@@ -40,11 +39,7 @@ class LoginNSignup : AppCompatActivity() {
             setContentView(R.layout.login)
             setupLogin()
         }
-
-        
     }
-
-
 
     private fun setupLogin() {
         val emailField = findViewById<EditText>(R.id.emailField)

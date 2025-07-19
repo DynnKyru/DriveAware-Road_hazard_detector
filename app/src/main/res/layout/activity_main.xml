@@ -171,10 +171,10 @@
             <!-- Inference Time Text -->
             <TextView
                 android:id="@+id/inferenceTime"
-                android:layout_width="72dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="100000ms" />
+                android:text="calculating..." />
         </LinearLayout>
 
         <!-- Detection TextViews -->

@@ -38,7 +38,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.DynnKyru.driveAware.Constants.LABELS_PATH
 import com.DynnKyru.driveAware.Constants.MODEL_PATH
 import com.DynnKyru.driveAware.databinding.ActivityMainBinding
@@ -58,7 +57,6 @@ import org.osmdroid.views.MapView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
-import android.widget.SearchView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.bumptech.glide.Glide
@@ -79,7 +77,6 @@ import java.text.SimpleDateFormat
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var lastDetectionText = "Detecting"
     private val isFrontCamera = false
     private var preview: Preview? = null
     private var imageAnalyzer: ImageAnalysis? = null
@@ -155,6 +152,22 @@ class MainActivity : AppCompatActivity() {
         setupMapButton(binding.mapButton)
         setupSettingsButton(binding.settingsButton)
 
+        val isGpuToggle: ToggleButton = findViewById(R.id.isGpu)
+        // Set up the listener for the GPU toggle button
+        isGpuToggle.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+            cameraExecutor.submit {
+                detector?.restart(isGpu = isChecked)
+            }
+            // Change the background color of the ToggleButton based on the checked state
+            val backgroundColor = if (isChecked) {
+                ContextCompat.getColor(baseContext, R.color.light_blue) // On color
+            } else {
+                ContextCompat.getColor(baseContext, R.color.white) // Off color
+            }
+
+            // Update the backgroundTint using the appropriate color
+            buttonView.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
@@ -180,11 +193,11 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding.fab.setOnClickListener {
+        binding.mapButton.setOnClickListener {
             val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.bottomsheetlayout, null)
+            val view = layoutInflater.inflate(R.layout.mapcontainer, null)
             dialog.setContentView(view)
-
+            // map
             val mapView = view.findViewById<MapView>(R.id.map)
 
             dialog.setOnShowListener {
@@ -197,7 +210,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }, 500)
             }
-
             dialog.show()
         }
 
@@ -231,12 +243,6 @@ class MainActivity : AppCompatActivity() {
         // Dismiss notification on tap
         findViewById<CardView>(R.id.detectionNotificationCard)?.setOnClickListener {
             hideNotification()
-        }
-
-
-        // Floating Action Button for showing bottom dialog
-        binding.fab.setOnClickListener {
-            showBottomDialog()
         }
     }
 
@@ -378,7 +384,6 @@ class MainActivity : AppCompatActivity() {
                 longitude = 0.0,
                 timestamp = timestamp
             )
-
             detectionRecords.add(record)
             Log.w("DetectionLog", "⚠️ Detection saved without GPS")
         }
@@ -455,32 +460,26 @@ class MainActivity : AppCompatActivity() {
 
                 showNotification("$detectedClass detected! Severity: ${severity.name}")
 
-                // ✅ Check if alert switch is ON
+                // Check if alert switch is ON
                 val isAlertEnabled = sharedPreferences.getBoolean(ALERT_KEY, true)
 
-                // ✅ Play sound only if alerts are enabled AND severity is MEDIUM or HIGH
+                // Play sound only if alerts are enabled AND severity is MEDIUM or HIGH
                 if (isAlertEnabled && (severity == Severity.CRITICAL || severity == Severity.HIGH)) {
                     mediaPlayer?.start()
                 }
 
                 if (severity == Severity.HIGH) vibratePhone()
 
-                // Update UI (NEEEEEEEEED TOOOOOOO CHAAAAAAAAAANGHEE)
-                findViewById<TextView>(R.id.detectionResultTextMain)?.text = "Detecting: $detectionText"
-                detectionResultTextSheetView?.text = "Detecting: $detectionText"
-                lastDetectionText = "Detecting: $detectionText"
-
+                // Update UI (medyo oke na
                 binding.overlay.apply {
                     setResults(listOf(detectedBox))
                     invalidate()
                 }
             } else {
                 hideNotification()
-                findViewById<TextView>(R.id.detectionResultTextMain)?.text = "Detecting"
                 detectionResultTextSheetView?.text = "Detecting"
             }
 
-            binding.inferenceTime.text = "${inferenceTime}ms"
         }
     }
 
@@ -596,12 +595,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Close
-        backBtn?.setOnClickListener { sheet.dismiss() }
-
-        sheet.show()
+        backBtn?.setOnClickListener {
+            sheet.dismiss()
+        }
     }
-
-
     // Pass in the view if you want, but you can also just look it up by ID.
     private fun setupMapButton(btn: View? = null) {
         val mapBtn = (btn ?: findViewById<MaterialCardView>(R.id.mapButton))
@@ -639,7 +636,7 @@ class MainActivity : AppCompatActivity() {
                     val imageUrl = doc.getString("imageUrl") ?: ""
                     val timestamp = System.currentTimeMillis()
 
-                    // ✅ Remove duplicate red markers at this location
+                    // Remove duplicate red markers at this location
                     //detectionRecords.removeAll { local ->
                     //    !local.isReported &&
                     //           Math.abs(local.latitude - lat) < 0.000001 &&
@@ -662,24 +659,18 @@ class MainActivity : AppCompatActivity() {
                 onComplete()
             }
             .addOnFailureListener { e ->
-                Log.e("FirebaseLoad", "❌ Failed to load reports: ${e.message}", e)
+                Log.e("FirebaseLoad", "Failed to load reports: ${e.message}", e)
                 onComplete()
             }
 
     }
 
+    //removing this but we might need the code for mappings later
 
+    /*
     private fun showBottomDialog() {
-        val dialog = createDialog(R.layout.bottomsheetlayout)
-        dialog.show()
-        val mapView = dialog.findViewById<MapView>(R.id.map)
-        val searchView = dialog.findViewById<SearchView>(R.id.searchView)
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f) // Default to Manila
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f)
-        val detectionTextView = dialog.findViewById<TextView>(R.id.detectionResultTextSheet)
-        detectionResultTextSheetView = detectionTextView  // Save reference
-        detectionTextView?.text = lastDetectionText
-
         // Set initial user location
         MapManager.clearSearchState()  // 👈 Add this right before setupMap
         loadReportedDetectionsFromFirebase {
@@ -693,7 +684,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.isNullOrEmpty() && MapManager.isSearchActive()) {
                     MapManager.resetToUserLocation(this@MainActivity, mapView, detectionRecords)
@@ -708,11 +698,11 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showMenuBottomDialog()
         }
-    }
-
+    }*/
+    /*
     private fun showMenuBottomDialog() {
         val dialog = createDialog(R.layout.bottomsheet_menu)
-        val isGpuToggle: ToggleButton = dialog.findViewById(R.id.isGpu)
+
         val helpButton: ImageView? = dialog.findViewById(R.id.HelpButton)
         val settingsLayout: LinearLayout? = dialog.findViewById(R.id.layoutSettings)
         val profileLayout: LinearLayout? = dialog.findViewById(R.id.layoutProfile)
@@ -737,26 +727,11 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showReportMenuDialog()
         }
-        // Set up the listener for the GPU toggle button
-        isGpuToggle.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
-            cameraExecutor.submit {
-                detector?.restart(isGpu = isChecked)
-            }
 
-            // Change the background color of the ToggleButton based on the checked state
-            val backgroundColor = if (isChecked) {
-                ContextCompat.getColor(baseContext, R.color.green) // On color
-            } else {
-                ContextCompat.getColor(baseContext, R.color.white) // Off color
-            }
-
-            // Update the backgroundTint using the appropriate color
-            buttonView.backgroundTintList = ColorStateList.valueOf(backgroundColor)
-        }
         cancelMenuButton?.setOnClickListener { dialog.dismiss() }
 
         dialog.show()
-    }
+    }*/
 
 
     private fun loadSwitchStates(
@@ -1040,7 +1015,7 @@ class MainActivity : AppCompatActivity() {
         val timeText: TextView = dialog.findViewById(R.id.time)
         val dateText: TextView = dialog.findViewById(R.id.date)
 
-        // ✅ Auto-fill location
+        // Auto-fill location
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f)
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f)
         val geocoder = Geocoder(this, Locale.getDefault())
@@ -1057,7 +1032,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("Geocoder", "Failed to get address: ${e.message}", e)
         }
 
-        // ✅ Auto-fill date and time
+        // Auto-fill date and time
         val currentDate = java.text.SimpleDateFormat("MMMM dd yyyy", Locale.getDefault()).format(Date())
         val currentTime = java.text.SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date())
         dateText.text = currentDate
@@ -1072,9 +1047,9 @@ class MainActivity : AppCompatActivity() {
                 val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
                 reportImage.setImageBitmap(bitmap)
                 selectedReportBitmap = bitmap
-                Log.d("AutoImageLoad", "✅ Loaded image from $path")
+                Log.d("AutoImageLoad", " Loaded image from $path")
             } else {
-                Log.w("AutoImageLoad", "⚠️ Image file does not exist at $path")
+                Log.w("AutoImageLoad", " Image file does not exist at $path")
             }
         }
 
@@ -1091,10 +1066,10 @@ class MainActivity : AppCompatActivity() {
 
         // Buttons
         val reportButton: Button = dialog.findViewById(R.id.Reportbutton)
-        val viewHistoryButton: Button = dialog.findViewById(R.id.ViewhistoryButton) // ✅ New line
+        val viewHistoryButton: Button = dialog.findViewById(R.id.ViewhistoryButton) // New line
 
         reportButton.setOnClickListener {
-            // ✅ Dynamically set hazard type from checkboxes
+            // Dynamically set hazard type from checkboxes
             val selectedTypes = mutableListOf<String>()
             if (roadCrackCheckBox.isChecked) selectedTypes.add("Road Crack")
             if (roadPotholeCheckBox.isChecked) selectedTypes.add("Pothole")
@@ -1124,7 +1099,7 @@ class MainActivity : AppCompatActivity() {
             showReportVerificationDialog(hazardType, location, time, date, bitmap)
         }
 
-        // ✅ View History Button Action
+        // View History Button Action
         viewHistoryButton.setOnClickListener {
             dialog.dismiss()
             showReportHistoryDialog()
@@ -1253,11 +1228,11 @@ class MainActivity : AppCompatActivity() {
                 .set(reportData)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Report saved!", Toast.LENGTH_SHORT).show()
-                    Log.d("FirebaseReport", "✅ Report saved with ID: $reportId")
+                    Log.d("FirebaseReport", " Report saved with ID: $reportId")
 
                     // Mark detection as reported
                     selectedDetectionRecord?.isReported = true
-                    Log.d("ReportStatus", "✅ Detection marked as reported: ${selectedDetectionRecord?.anomalyType}")
+                    Log.d("ReportStatus", " Detection marked as reported: ${selectedDetectionRecord?.anomalyType}")
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Failed to save report", Toast.LENGTH_SHORT).show()
@@ -1372,7 +1347,7 @@ class MainActivity : AppCompatActivity() {
 
     fun Notificationsswitch(view: View) {
         val switch = view as Switch
-        isNotificationEnabled = switch.isChecked // ✅ Update the flag
+        isNotificationEnabled = switch.isChecked // Update the flag
 
         if (!isNotificationEnabled) {
             hideNotification() // Hide any active notifications

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/dialogbg"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/dialogbg">
+    android:padding="16dp">
 
     <!-- ✅ Top Bar -->
     <RelativeLayout
@@ -20,33 +20,33 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:backgroundTint="@color/black"
-            android:src="@drawable/ic_round_remove_24"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_round_remove_24" />
 
         <ImageView
             android:id="@+id/Backbutton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="8dp"
             android:clickable="true"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
             android:src="@drawable/back_arrow"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="16dp" />
+            app:layout_constraintTop_toTopOf="parent" />
         <!-- Cancel (X) Button -->
         <ImageView
             android:id="@+id/cancelMenuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_baseline_clear_24" />
+            android:src="@drawable/ic_exit" />
     </RelativeLayout>
     <!-- Title -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_horizontal"
+        android:orientation="horizontal"
         android:paddingBottom="8dp">
 
         <TextView
@@ -54,9 +54,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Detect Mode"
+            android:textColor="#000000"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -77,11 +77,11 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
             android:text="Road Cracks"
             android:textColor="@color/black"
-            android:layout_marginLeft="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/RoadcrackCheckbox"
@@ -91,10 +91,10 @@
 
     <!-- Road Potholes -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutRoadpotholes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -108,10 +108,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+            android:layout_weight="1"
             android:text="Road Potholes"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/RoadpotholeCheckbox"
@@ -121,10 +121,10 @@
 
     <!-- Speed Bump -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutRoadspeedbump"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -138,10 +138,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+            android:layout_weight="1"
             android:text="Speed Bump"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/SpeedbumpCheckbox"
@@ -151,10 +151,10 @@
 
     <!-- Road Manhole -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutRoadmanhole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -167,11 +167,11 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
             android:text="Road Manhole"
             android:textColor="@color/black"
-            android:layout_marginLeft="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/RoadmanholeCheckbox"
@@ -181,10 +181,10 @@
 
     <!-- Unfinished Pavements -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutunfinishedpavements"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -197,11 +197,11 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
             android:text="Unfinished Pavements"
             android:textColor="@color/black"
-            android:layout_marginLeft="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/UnfinishedpavementCheckbox"
@@ -211,10 +211,10 @@
 
     <!-- Puddles -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutRoadpuddles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -227,11 +227,11 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
             android:text="Puddles"
             android:textColor="@color/black"
-            android:layout_marginLeft="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/puddlesCheckbox"
@@ -245,14 +245,15 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp">
+
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            app:cardElevation="6dp"
-            app:cardCornerRadius="12dp"
+            android:padding="8dp"
             app:cardBackgroundColor="@color/white"
-            android:padding="8dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp">
 
             <Button
                 android:id="@+id/detectButton"

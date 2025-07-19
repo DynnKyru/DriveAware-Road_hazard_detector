@@ -152,6 +152,7 @@ class MainActivity : AppCompatActivity() {
         notificationBackground.alpha = 1f
         notificationBackground.visibility = View.VISIBLE
 
+        setupSettingsButton(binding.settingsButton)
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -573,6 +574,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // SETTINGS BUTTON
+    private fun setupSettingsButton(btn: MaterialCardView) {
+        btn.setOnClickListener {
+            showSettingsMenuDialog()
+        }
+    }
+
 
 
     private fun toast(message: String) {
@@ -736,6 +744,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showSettingsMenuDialog() {
         val dialog = createDialog(R.layout.settings)
+
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val alertModeLayout: LinearLayout? = dialog.findViewById(R.id.layoutAlertMode)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
@@ -756,8 +765,6 @@ class MainActivity : AppCompatActivity() {
             isNotificationEnabled = isChecked
             sharedPreferences.edit().putBoolean(NOTIFICATION_KEY, isChecked).apply()
         }
-
-
 
         backButton?.setOnClickListener {
             dialog.dismiss()

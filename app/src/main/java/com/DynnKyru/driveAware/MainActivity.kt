@@ -152,6 +152,7 @@ class MainActivity : AppCompatActivity() {
         notificationBackground.alpha = 1f
         notificationBackground.visibility = View.VISIBLE
 
+        setupMapButton(binding.mapButton)
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -563,15 +564,49 @@ class MainActivity : AppCompatActivity() {
             }
             .start()
     }
+    //to help show the map
+    private fun showMapContainerSheet() {
+        val sheet = BottomSheetDialog(this)
+        val sheetView = layoutInflater.inflate(R.layout.mapcontainer, null)
+        sheet.setContentView(sheetView)
 
-    // MAP BUTTON
-    private fun setupMapButton(btn: View) {
-        val mapButton = findViewById<MaterialCardView>(R.id.mapButton)
-        mapButton.setOnClickListener {
-            val intent = Intent(this, MapManager::class.java)
-            startActivity(intent)
+        // Views inside the sheet
+        val mapView = sheetView.findViewById<org.osmdroid.views.MapView>(R.id.map)
+        val backBtn = sheetView.findViewById<ImageView>(R.id.Backbutton)
+
+        // Use stored location (fallback Manila)
+        val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f).toDouble()
+        val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f).toDouble()
+
+        // Prepare map
+        MapManager.clearSearchState()
+        loadReportedDetectionsFromFirebase {
+            // detectionRecords must be available (class-level)
+            MapManager.setupMap(this, mapView, lat, lon, detectionRecords)
         }
+
+        // Lifecycle hooks (good practice w/ osmdroid)
+        sheet.setOnShowListener {
+            mapView.onResume()  // osmdroid recommendation
+        }
+        sheet.setOnDismissListener {
+            mapView.onPause()
+            mapView.onDetach()  // free tiles/cache refs
+        }
+
+        // Close
+        backBtn?.setOnClickListener { sheet.dismiss() }
+
+        sheet.show()
     }
+
+
+    // Pass in the view if you want, but you can also just look it up by ID.
+    private fun setupMapButton(btn: View? = null) {
+        val mapBtn = (btn ?: findViewById<MaterialCardView>(R.id.mapButton))
+        mapBtn.setOnClickListener { showMapContainerSheet() }
+    }
+
 
 
 

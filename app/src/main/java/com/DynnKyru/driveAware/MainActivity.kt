@@ -153,6 +153,7 @@ class MainActivity : AppCompatActivity() {
         notificationBackground.visibility = View.VISIBLE
 
         setupMapButton(binding.mapButton)
+        setupSettingsButton(binding.settingsButton)
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -223,8 +224,6 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
-
-
         // Initialize notification components
         notificationBanner = findViewById(R.id.detectionNotificationCard)
         notificationText = findViewById(R.id.detectionNotificationText)
@@ -236,7 +235,9 @@ class MainActivity : AppCompatActivity() {
 
 
         // Floating Action Button for showing bottom dialog
-        binding.fab.setOnClickListener { showBottomDialog() }
+        binding.fab.setOnClickListener {
+            showBottomDialog()
+        }
     }
 
     private val imagePickerLauncher = registerForActivityResult(
@@ -608,6 +609,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    // SETTINGS BUTTON
+    private fun setupSettingsButton(btn: MaterialCardView) {
+        btn.setOnClickListener {
+            showSettingsMenuDialog()
+        }
+    }
+
 
 
     private fun toast(message: String) {
@@ -791,12 +799,17 @@ class MainActivity : AppCompatActivity() {
             isNotificationEnabled = isChecked
             sharedPreferences.edit().putBoolean(NOTIFICATION_KEY, isChecked).apply()
         }
+        profileLayout?.setOnClickListener {
+            dialog.dismiss()
+            showProfileMenuDialog()
+        }
 
-
-
+        reportLayout?.setOnClickListener {
+            dialog.dismiss()
+            showReportMenuDialog()
+        }
         backButton?.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog() // Go back to main menu
         }
         alertModeLayout?.setOnClickListener {
             dialog.dismiss()
@@ -821,7 +834,7 @@ class MainActivity : AppCompatActivity() {
 
         backButton?.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog() // Go back to main menu
+            showSettingsMenuDialog() // Go back to main menu
         }
 
         helpCamera?.setOnClickListener {
@@ -989,7 +1002,7 @@ class MainActivity : AppCompatActivity() {
 
         backButton?.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog()
+            showSettingsMenuDialog()
         }
     }
 
@@ -1121,7 +1134,7 @@ class MainActivity : AppCompatActivity() {
         // Back/cancel
         backButton.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog()
+            showSettingsMenuDialog()
         }
         cancelMenuButton.setOnClickListener { dialog.dismiss() }
 

@@ -152,6 +152,7 @@ class MainActivity : AppCompatActivity() {
         notificationBackground.alpha = 1f
         notificationBackground.visibility = View.VISIBLE
 
+        setupMapButton(binding.mapButton)
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -563,6 +564,50 @@ class MainActivity : AppCompatActivity() {
             }
             .start()
     }
+    //to help show the map
+    private fun showMapContainerSheet() {
+        val sheet = BottomSheetDialog(this)
+        val sheetView = layoutInflater.inflate(R.layout.mapcontainer, null)
+        sheet.setContentView(sheetView)
+
+        // Views inside the sheet
+        val mapView = sheetView.findViewById<org.osmdroid.views.MapView>(R.id.map)
+        val backBtn = sheetView.findViewById<ImageView>(R.id.Backbutton)
+
+        // Use stored location (fallback Manila)
+        val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f).toDouble()
+        val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f).toDouble()
+
+        // Prepare map
+        MapManager.clearSearchState()
+        loadReportedDetectionsFromFirebase {
+            // detectionRecords must be available (class-level)
+            MapManager.setupMap(this, mapView, lat, lon, detectionRecords)
+        }
+
+        // Lifecycle hooks (good practice w/ osmdroid)
+        sheet.setOnShowListener {
+            mapView.onResume()  // osmdroid recommendation
+        }
+        sheet.setOnDismissListener {
+            mapView.onPause()
+            mapView.onDetach()  // free tiles/cache refs
+        }
+
+        // Close
+        backBtn?.setOnClickListener { sheet.dismiss() }
+
+        sheet.show()
+    }
+
+
+    // Pass in the view if you want, but you can also just look it up by ID.
+    private fun setupMapButton(btn: View? = null) {
+        val mapBtn = (btn ?: findViewById<MaterialCardView>(R.id.mapButton))
+        mapBtn.setOnClickListener { showMapContainerSheet() }
+    }
+
+
 
 
     private fun toast(message: String) {
@@ -628,7 +673,7 @@ class MainActivity : AppCompatActivity() {
         detectionTextView?.text = lastDetectionText
 
         // Set initial user location
-        MapManager.clearSearchState()  // Add this right before setupMap
+        MapManager.clearSearchState()  // 👈 Add this right before setupMap
         loadReportedDetectionsFromFirebase {
             MapManager.setupMap(this, mapView, lat.toDouble(), lon.toDouble(), detectionRecords)
         }
@@ -983,7 +1028,7 @@ class MainActivity : AppCompatActivity() {
         val timeText: TextView = dialog.findViewById(R.id.time)
         val dateText: TextView = dialog.findViewById(R.id.date)
 
-        // Auto-fill location
+        // ✅ Auto-fill location
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f)
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f)
         val geocoder = Geocoder(this, Locale.getDefault())
@@ -1000,7 +1045,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("Geocoder", "Failed to get address: ${e.message}", e)
         }
 
-        // Auto-fill date and time
+        // ✅ Auto-fill date and time
         val currentDate = java.text.SimpleDateFormat("MMMM dd yyyy", Locale.getDefault()).format(Date())
         val currentTime = java.text.SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date())
         dateText.text = currentDate
@@ -1037,7 +1082,7 @@ class MainActivity : AppCompatActivity() {
         val viewHistoryButton: Button = dialog.findViewById(R.id.ViewhistoryButton) // ✅ New line
 
         reportButton.setOnClickListener {
-            // Dynamically set hazard type from checkboxes
+            // ✅ Dynamically set hazard type from checkboxes
             val selectedTypes = mutableListOf<String>()
             if (roadCrackCheckBox.isChecked) selectedTypes.add("Road Crack")
             if (roadPotholeCheckBox.isChecked) selectedTypes.add("Pothole")
@@ -1067,7 +1112,7 @@ class MainActivity : AppCompatActivity() {
             showReportVerificationDialog(hazardType, location, time, date, bitmap)
         }
 
-        // View History Button Action
+        // ✅ View History Button Action
         viewHistoryButton.setOnClickListener {
             dialog.dismiss()
             showReportHistoryDialog()

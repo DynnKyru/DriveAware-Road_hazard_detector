@@ -71,6 +71,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.view.animation.OvershootInterpolator
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 
@@ -561,6 +562,15 @@ class MainActivity : AppCompatActivity() {
                 notificationBanner.visibility = View.GONE
             }
             .start()
+    }
+
+    // MAP BUTTON
+    private fun setupMapButton(btn: View) {
+        val mapButton = findViewById<MaterialCardView>(R.id.mapButton)
+        mapButton.setOnClickListener {
+            val intent = Intent(this, MapManager::class.java)
+            startActivity(intent)
+        }
     }
 
 

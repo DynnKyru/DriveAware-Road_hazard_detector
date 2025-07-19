@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "YoloV9 Tflite"
+rootProject.name = "DriveAware-Project"
 include(":app")
  

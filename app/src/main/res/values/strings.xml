@@ -3,4 +3,6 @@
     <string name="gpu">GPU</string>
     <string name="yolov9_object_detect">YoloV9 Object Detection</string>
     <string name="map">Map</string>
+    <string name="detected">Detected!</string>
+    <string name="detecting">Detecting...</string>
 </resources>

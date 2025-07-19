@@ -26,8 +26,8 @@
         <ImageView
             android:id="@+id/Backbutton"
             android:clickable="true"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/back_arrow"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,11 +35,11 @@
         <!-- Cancel (X) Button on Right -->
         <ImageView
             android:id="@+id/cancelMenuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_baseline_clear_24"
-            android:layout_marginEnd="8dp"/>
+            android:layout_margin="17dp"
+            android:src="@drawable/ic_exit" />
     </RelativeLayout>
 
     <!-- Profile Title (Centered) -->

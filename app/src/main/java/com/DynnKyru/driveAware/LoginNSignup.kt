@@ -33,13 +33,18 @@ class LoginNSignup : AppCompatActivity() {
         val showSignup = intent.getBooleanExtra("showSignup", false)
 
 
-        if (showSignup) {
+        /*if (showSignup) {
             setContentView(R.layout.signup)
             setupSignup()
         } else {
             setContentView(R.layout.login)
             setupLogin()
-        }
+        }*/
+
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+
     }
 
     private fun setupLogin() {

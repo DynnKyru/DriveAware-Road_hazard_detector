@@ -13,6 +13,7 @@ constraintlayout = "2.1.4"
 navVersion = "2.7.7"
 playServicesLocation = "21.3.0"
 firebaseStorageKtx = "21.0.1"
+preferenceKtx = "1.2.1"
 
 
 [libraries]
@@ -33,6 +34,7 @@ androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:na
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navVersion" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preferenceKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

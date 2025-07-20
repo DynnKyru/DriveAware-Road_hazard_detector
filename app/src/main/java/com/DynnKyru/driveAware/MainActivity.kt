@@ -547,51 +547,42 @@ class MainActivity : AppCompatActivity() {
     }
     //to help show the map
     private fun showMapContainerSheet() {
-        val sheet = BottomSheetDialog(this)
-        val sheetView = layoutInflater.inflate(R.layout.mapcontainer, null)
-        sheet.setContentView(sheetView)
-        val mapView = sheetView.findViewById<MapView>(R.id.map)
-
-        sheet.setOnShowListener {
-            mapView.postDelayed({
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                    MapManager.setupMap(this, mapView, 14.5995, 120.9842, detectionRecords)
-                } else {
-                    Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show()
-                }
-            }, 500)
+        val dialog = Dialog(this).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(R.layout.mapcontainer)
+            setCancelable(true)
         }
-        sheet.show()
 
-        // Views inside the sheet
-        // val mView = sheetView.findViewById<org.osmdroid.views.MapView>(R.id.map)
-        val backBtn = sheetView.findViewById<ImageView>(R.id.backBtn)
+        // Fix window settings here
+        dialog.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.windowAnimations = R.style.DialogAnimation
+            setGravity(Gravity.CENTER) // ❗ This centers it
+        }
 
-        // Use stored location (fallback Manila)
+        val mapView = dialog.findViewById<MapView>(R.id.map)
+        val backBtn = dialog.findViewById<ImageView>(R.id.backBtn)
+
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f).toDouble()
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f).toDouble()
 
-        // Prepare map
         MapManager.clearSearchState()
         loadReportedDetectionsFromFirebase {
-            // detectionRecords must be available (class-level)
             MapManager.setupMap(this, mapView, lat, lon, detectionRecords)
         }
 
-        // Lifecycle hooks (good practice w/ osmdroid)
-        sheet.setOnShowListener {
-            mapView.onResume()  // osmdroid recommendation
+        backBtn.setOnClickListener { dialog.dismiss() }
+
+        dialog.setOnShowListener {
+            mapView.onResume()
         }
-        sheet.setOnDismissListener {
+        dialog.setOnDismissListener {
             mapView.onPause()
-            mapView.onDetach()  // free tiles/cache refs
+            mapView.onDetach()
         }
 
-        // Close
-        backBtn?.setOnClickListener {
-            sheet.dismiss()
-        }
+        dialog.show()
     }
     // Pass in the view if you want, but you can also just look it up by ID.
     private fun setupMapButton(btn: View? = null) {

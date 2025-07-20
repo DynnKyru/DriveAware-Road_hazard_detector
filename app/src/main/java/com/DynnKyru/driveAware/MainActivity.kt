@@ -152,23 +152,6 @@ class MainActivity : AppCompatActivity() {
         setupMapButton(binding.mapButton)
         setupSettingsButton(binding.settingsButton)
 
-        val isGpuToggle: ToggleButton = findViewById(R.id.isGpu)
-        // Set up the listener for the GPU toggle button
-        isGpuToggle.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
-            cameraExecutor.submit {
-                detector?.restart(isGpu = isChecked)
-            }
-            // Change the background color of the ToggleButton based on the checked state
-            val backgroundColor = if (isChecked) {
-                ContextCompat.getColor(baseContext, R.color.light_blue) // On color
-            } else {
-                ContextCompat.getColor(baseContext, R.color.white) // Off color
-            }
-
-            // Update the backgroundTint using the appropriate color
-            buttonView.backgroundTintList = ColorStateList.valueOf(backgroundColor)
-        }
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
 
@@ -186,31 +169,29 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        val isGpuToggle: ToggleButton = findViewById(R.id.isGpu)
+        // Set up the listener for the GPU toggle button
+        isGpuToggle.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+            cameraExecutor.submit {
+                detector?.restart(isGpu = isChecked)
+            }
+            // Change the background color of the ToggleButton based on the checked state
+            val backgroundColor = if (isChecked) {
+                ContextCompat.getColor(baseContext, R.color.light_blue) // On color
+            } else {
+                ContextCompat.getColor(baseContext, R.color.white) // Off color
+            }
+
+            // Update the backgroundTint using the appropriate color
+            buttonView.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+        }
+
         mediaPlayer = MediaPlayer.create(this, R.raw.notif_sound)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-        binding.mapButton.setOnClickListener {
-            val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.mapcontainer, null)
-            dialog.setContentView(view)
-            // map
-            val mapView = view.findViewById<MapView>(R.id.map)
-
-            dialog.setOnShowListener {
-                mapView.postDelayed({
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                        MapManager.setupMap(this, mapView, 14.5995, 120.9842, detectionRecords)
-                    } else {
-                        Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show()
-                    }
-                }, 500)
-            }
-            dialog.show()
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -569,10 +550,23 @@ class MainActivity : AppCompatActivity() {
         val sheet = BottomSheetDialog(this)
         val sheetView = layoutInflater.inflate(R.layout.mapcontainer, null)
         sheet.setContentView(sheetView)
+        val mapView = sheetView.findViewById<MapView>(R.id.map)
+
+        sheet.setOnShowListener {
+            mapView.postDelayed({
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                    MapManager.setupMap(this, mapView, 14.5995, 120.9842, detectionRecords)
+                } else {
+                    Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show()
+                }
+            }, 500)
+        }
+        sheet.show()
 
         // Views inside the sheet
-        val mapView = sheetView.findViewById<org.osmdroid.views.MapView>(R.id.map)
-        val backBtn = sheetView.findViewById<ImageView>(R.id.Backbutton)
+        // val mView = sheetView.findViewById<org.osmdroid.views.MapView>(R.id.map)
+        val backBtn = sheetView.findViewById<ImageView>(R.id.backBtn)
 
         // Use stored location (fallback Manila)
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f).toDouble()

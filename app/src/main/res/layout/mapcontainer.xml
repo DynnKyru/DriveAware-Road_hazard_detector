@@ -46,15 +46,22 @@
                     android:layout_marginEnd="16dp"
                     android:clickable="true"
                     android:src="@drawable/back_arrow" />
+
+                <!-- Underline -->
+                <View
+                    android:id="@+id/mapUnderline"
+                    android:layout_width="80dp"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/mapTitle"
+                    android:layout_alignStart="@id/mapTitle"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp"
+                    android:background="#000000" />
+
+
             </RelativeLayout>
 
-            <!-- Underline -->
-            <View
-                android:layout_width="80dp"
-                android:layout_height="2dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginBottom="8dp"
-                android:background="#000000" />
+
 
             <!-- Map View -->
             <org.osmdroid.views.MapView

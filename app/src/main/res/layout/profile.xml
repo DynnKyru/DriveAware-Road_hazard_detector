@@ -2,70 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/dialogbg"
+    android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="16dp">
 
     <!-- ✅ Top buttons layout -->
 
-    <!-- Content Below -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
-
-        <!-- Top Center Button -->
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
 
         <ImageView
             android:id="@+id/Backbutton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="-1dp"
             android:clickable="true"
-            android:src="@drawable/back_arrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/back_arrow" />
 
-        <ImageView
-            android:id="@+id/topCenterButton"
-            android:layout_width="70dp"
+        <TextView
+            android:id="@+id/menuTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:backgroundTint="@color/black"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_round_remove_24" />
+            android:layout_marginStart="110dp"
+            android:text="Profile"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-
-        <!-- Cancel (X) Button on Right -->
-        <ImageView
-            android:id="@+id/cancelMenuButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_exit" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:gravity="center"
+        android:layout_marginStart="-25dp"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <TextView
-            android:id="@+id/menuTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:text="Profile"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
 
         <LinearLayout
             android:id="@+id/layoutUsername"
@@ -74,6 +55,7 @@
             android:layout_marginTop="20dp"
             android:elevation="4dp"
             android:gravity="center"
+            android:layout_marginStart="-80dp"
             android:orientation="vertical"
             android:padding="20dp">
 
@@ -135,12 +117,7 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <ImageView
-                android:id="@+id/UserdetailsNavigationArrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/right_arrow" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -176,12 +153,7 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <ImageView
-                android:id="@+id/SignoutNavigationArrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/right_arrow" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

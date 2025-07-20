@@ -1345,23 +1345,24 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, if (isChecked) "Night Mode Enabled" else "Night Mode Disabled", Toast.LENGTH_SHORT).show()
     }
     fun Context.createDialog(layoutId: Int): Dialog {
-        val dialog = Dialog(this)
+        val dialog = Dialog(this, android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
         dialog.setContentView(layoutId)
 
-        // Optional: Make background transparent
+        // Make background transparent only if your layout has its own background (e.g. rounded corners)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        // Optional: Set layout size
+        // Set layout size to fullscreen
         dialog.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.MATCH_PARENT // Change from WRAP_CONTENT to MATCH_PARENT
         )
 
-        // Optional: Disable outside touch to dismiss
+        // Disable outside touch to dismiss if needed
         dialog.setCancelable(true)
 
         return dialog
     }
+
 
     private fun setupDialogWindow(dialog: Dialog) {
         dialog.window?.apply {

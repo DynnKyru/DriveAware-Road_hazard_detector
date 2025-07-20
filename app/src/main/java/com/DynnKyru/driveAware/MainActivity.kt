@@ -558,7 +558,6 @@ class MainActivity : AppCompatActivity() {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             attributes.windowAnimations = R.style.DialogAnimation
-            setGravity(Gravity.CENTER) // ❗ This centers it
         }
 
         val mapView = dialog.findViewById<MapView>(R.id.map)
@@ -571,17 +570,9 @@ class MainActivity : AppCompatActivity() {
         loadReportedDetectionsFromFirebase {
             MapManager.setupMap(this, mapView, lat, lon, detectionRecords)
         }
-
         backBtn.setOnClickListener { dialog.dismiss() }
-
-        dialog.setOnShowListener {
-            mapView.onResume()
-        }
-        dialog.setOnDismissListener {
-            mapView.onPause()
-            mapView.onDetach()
-        }
-
+        dialog.setOnShowListener { mapView.onResume() }
+        dialog.setOnDismissListener { mapView.onPause() }
         dialog.show()
     }
     // Pass in the view if you want, but you can also just look it up by ID.
@@ -589,8 +580,6 @@ class MainActivity : AppCompatActivity() {
         val mapBtn = (btn ?: findViewById<MaterialCardView>(R.id.mapButton))
         mapBtn.setOnClickListener { showMapContainerSheet() }
     }
-
-
     // SETTINGS BUTTON
     private fun setupSettingsButton(btn: MaterialCardView) {
         btn.setOnClickListener {

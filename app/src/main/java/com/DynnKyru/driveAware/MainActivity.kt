@@ -68,6 +68,7 @@ import java.io.FileOutputStream
 import java.util.Date
 import java.util.Locale
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.view.animation.OvershootInterpolator
@@ -1335,13 +1336,22 @@ class MainActivity : AppCompatActivity() {
         val isChecked = switch.isChecked
         Toast.makeText(this, if (isChecked) "Night Mode Enabled" else "Night Mode Disabled", Toast.LENGTH_SHORT).show()
     }
+    fun Context.createDialog(layoutId: Int): Dialog {
+        val dialog = Dialog(this)
+        dialog.setContentView(layoutId)
 
-    private fun createDialog(layoutResId: Int): Dialog {
-        val dialog = Dialog(this).apply {
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setContentView(layoutResId)
-        }
-        setupDialogWindow(dialog)
+        // Optional: Make background transparent
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Optional: Set layout size
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        // Optional: Disable outside touch to dismiss
+        dialog.setCancelable(true)
+
         return dialog
     }
 

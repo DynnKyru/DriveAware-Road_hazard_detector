@@ -3,10 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    >
+    android:padding="16dp" >
     <!-- Underline below title -->
-
     <TextView
         android:id="@+id/mapTitle"
         android:layout_width="wrap_content"
@@ -18,7 +16,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <View
         android:id="@+id/underlineLine"
         android:layout_width="80dp"
@@ -31,7 +28,7 @@
 
     <!-- Back Button (top-right) -->
     <ImageView
-        android:id="@+id/Backbutton"
+        android:id="@+id/backBtn"
         android:layout_width="30dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"

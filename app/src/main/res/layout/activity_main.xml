@@ -131,7 +131,7 @@
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="28dp"
-        app:cardElevation="15dp"
+        app:cardElevation="1dp"
         app:strokeWidth="1dp"
         app:cardBackgroundColor="#FFFFFF"
         app:layout_constraintTop_toTopOf="parent"
@@ -148,9 +148,6 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-    <!--Map Container -->
-
-
     <!--Settings Button -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/settingsButton"
@@ -162,7 +159,7 @@
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="28dp"
-        app:cardElevation="15dp"
+        app:cardElevation="1dp"
         app:strokeWidth="1dp"
         app:cardBackgroundColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
@@ -179,33 +176,104 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-
-
     <!--Sound Button -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/soundButton"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_margin="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/soundMenuContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="15dp"
-        app:strokeWidth="1dp"
-        app:cardBackgroundColor="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.95"
-        app:layout_constraintHorizontal_bias="1"
+        android:layout_marginTop="17dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_foreground"
+        app:layout_constraintTop_toBottomOf="@id/settingsButton"
         app:layout_constraintEnd_toEndOf="parent">
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_sound"/>
-    </com.google.android.material.card.MaterialCardView>
+
+        <!-- BEEP -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/beepButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/voiceButton"
+            android:layout_marginEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_beep"
+                android:contentDescription="Beep mode"/>
+        </com.google.android.material.card.MaterialCardView>
+        <!-- VOICE -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/voiceButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/soundButton"
+            android:layout_marginEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_voice"
+                android:contentDescription="Voice mode"/>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- SILENT -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/silentButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/beepButton"
+            android:layout_marginEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_silent"
+                android:contentDescription="Silent mode"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- MAIN SOUND BUTTON -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/soundButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/soundIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="Sound Icon"
+                android:src="@drawable/ic_sound"/>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- GPU -->
     <androidx.cardview.widget.CardView
@@ -215,12 +283,12 @@
         android:layout_marginStart="16dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="28dp"
-        app:cardElevation="15dp"
+        app:cardElevation="0dp"
         app:strokeWidth="1dp"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/soundButton"
-        app:layout_constraintTop_toTopOf="@+id/soundButton">
+        app:layout_constraintBottom_toBottomOf="@+id/soundMenuContainer"
+        app:layout_constraintTop_toTopOf="@+id/soundMenuContainer">
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -229,7 +297,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/circular_toggle_background"
-            android:backgroundTint="@android:color/transparent"
             android:checked="true"
             android:textColor="@android:color/black"
             android:textOff="@string/gpu"

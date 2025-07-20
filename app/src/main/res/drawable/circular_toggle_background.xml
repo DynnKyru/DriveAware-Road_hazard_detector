@@ -3,18 +3,18 @@
     <!-- State when ToggleButton is checked -->
     <item android:state_checked="true">
         <shape android:shape="oval">
-            <solid android:color="@color/light_blue" />
-            <stroke android:width="3dp"
-                android:color="@color/light_green" />
+            <solid android:color="@color/light_blue"
+                android:width="30dp"
+                android:height="30dp"/>
+
         </shape>
     </item>
     <!-- Default state (unchecked) -->
     <item>
         <shape android:shape="oval">
-            <solid android:color="@android:color/transparent" />
-            <!-- Optional: Add a stroke for the unchecked state -->
-            <stroke android:width="4dp"
-                android:color="@android:color/holo_blue_bright" />
+            <solid android:color="@android:color/transparent"
+                android:width="30dp"
+                android:height="30dp"/>
         </shape>
     </item>
 </selector>

@@ -52,7 +52,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ToggleButton
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.osmdroid.views.MapView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -70,6 +69,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.view.animation.OvershootInterpolator
+import com.DynnKyru.driveAware.ui.SoundSettingsManager
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
@@ -116,8 +116,15 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show()
             }
         }
-
-
+    private fun getHazardIcon(detection: String): Int {
+        return when (detection) {
+            "Uneven-terrain", "Road-cracks"  -> R.drawable.ic_dia
+            "Speed-Bumps" -> R.drawable.ic_bump
+            "Manholes", "Puddle" -> R.drawable.ic_octa
+            "Potholes" -> R.drawable.ic_pothole
+            else -> R.drawable.ic_detecting
+        }
+    }
     // Enum class for severity levels
     enum class Severity(val color: Int) {
         LOW(R.color.light_green),
@@ -125,6 +132,13 @@ class MainActivity : AppCompatActivity() {
         HIGH(R.color.light_orange),
         CRITICAL(R.color.light_red)
     }
+    //soundmenyu
+    private lateinit var soundButton: MaterialCardView
+    private lateinit var soundIcon: ImageView
+    private lateinit var voiceButton: MaterialCardView
+    private lateinit var beepButton: MaterialCardView
+    private lateinit var silentButton: MaterialCardView
+
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -153,6 +167,7 @@ class MainActivity : AppCompatActivity() {
         setupMapButton(binding.mapButton)
         setupSettingsButton(binding.settingsButton)
 
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
 
@@ -166,7 +181,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
         enableEdgeToEdge()
         setContentView(binding.root)
 
@@ -180,14 +194,36 @@ class MainActivity : AppCompatActivity() {
             val backgroundColor = if (isChecked) {
                 ContextCompat.getColor(baseContext, R.color.light_blue) // On color
             } else {
-                ContextCompat.getColor(baseContext, R.color.white) // Off color
+                ContextCompat.getColor(baseContext, R.color.Trans_white) // Off color
             }
 
             // Update the backgroundTint using the appropriate color
             buttonView.backgroundTintList = ColorStateList.valueOf(backgroundColor)
         }
+        // SOoooooooooooooooooooooooooooooooooUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUND
+        soundButton = findViewById(R.id.soundButton)
+        soundIcon = findViewById(R.id.soundIcon)
+        voiceButton = findViewById(R.id.voiceButton)
+        beepButton = findViewById(R.id.beepButton)
+        silentButton = findViewById(R.id.silentButton)
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.notif_sound)
+        // Load saved sound setting
+        val savedMode = SoundSettingsManager.getCurrentSoundSetting(this)
+        updateSoundIcon(savedMode)
+
+        soundButton.setOnClickListener {
+            toggleSoundMenu()
+        }
+        beepButton.setOnClickListener {
+            selectSoundOption(SoundSettingsManager.SoundMode.BEEP)
+        }
+        voiceButton.setOnClickListener {
+            selectSoundOption(SoundSettingsManager.SoundMode.VOICE)
+        }
+
+        silentButton.setOnClickListener {
+            selectSoundOption(SoundSettingsManager.SoundMode.SILENT)
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -377,8 +413,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        // 👇 Release MediaPlayer
         mediaPlayer?.release()
         mediaPlayer = null
 
@@ -413,15 +447,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getHazardIcon(detection: String): Int {
-        return when (detection) {
-            "Uneven-terrain", "Road-cracks"  -> R.drawable.ic_dia
-            "Speed-Bumps" -> R.drawable.ic_bump
-            "Manholes", "Puddle" -> R.drawable.ic_octa
-            "Potholes" -> R.drawable.ic_pothole
-            else -> R.drawable.ic_detecting
-        }
-    }
     private var lastDetectionTime = 0L
     private val detectionInterval = 4000 // Adjust time in milliseconds (e.g., 4000ms = 4 seconds)
 
@@ -444,13 +469,27 @@ class MainActivity : AppCompatActivity() {
 
                 // Check if alert switch is ON
                 val isAlertEnabled = sharedPreferences.getBoolean(ALERT_KEY, true)
-
+                mediaPlayer?.release()
+                mediaPlayer = null
+                val selectedMode = SoundSettingsManager.getCurrentSoundSetting(this)
                 // Play sound only if alerts are enabled AND severity is MEDIUM or HIGH
                 if (isAlertEnabled && (severity == Severity.CRITICAL || severity == Severity.HIGH)) {
-                    mediaPlayer?.start()
+                    when (selectedMode) {
+                        SoundSettingsManager.SoundMode.BEEP -> {
+                            mediaPlayer = MediaPlayer.create(this, R.raw.notif_sound)
+                            mediaPlayer?.start()
+                        }
+                        SoundSettingsManager.SoundMode.VOICE -> {
+                            mediaPlayer = MediaPlayer.create(this, R.raw.notif_voice)
+                            mediaPlayer?.start()
+                        }
+                        SoundSettingsManager.SoundMode.SILENT -> {
+                            // Do nothing
+                        }
+                    }
                 }
 
-                if (severity == Severity.HIGH) vibratePhone()
+                if (severity == Severity.CRITICAL) vibratePhone()
 
                 // Update UI (medyo oke na
                 binding.overlay.apply {
@@ -463,6 +502,54 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private var isSoundMenuExpanded = false
+    private fun toggleSoundMenu() {
+        val options = listOf(voiceButton, beepButton, silentButton)
+        if (::voiceButton.isInitialized && ::beepButton.isInitialized && ::silentButton.isInitialized) {
+            if (isSoundMenuExpanded) {
+                options.forEach { button ->
+                    button.animate()
+                        .translationX(100f)
+                        .alpha(0f)
+                        .setDuration(200)
+                        .withEndAction { button.visibility = View.GONE }
+                        .start()
+                }
+            } else {
+                val baseOffset = 70f
+                options.forEachIndexed { index, button ->
+                    button.visibility = View.VISIBLE
+                    button.alpha = 0f
+                    button.translationX = baseOffset * (index + 1)
+                    button.animate()
+                        .translationX(0f)
+                        .alpha(1f)
+                        .setDuration(300)
+                        .start()
+                }
+            }
+            isSoundMenuExpanded = !isSoundMenuExpanded
+        } else {
+            Log.e("SoundMenu", "Buttons not initialized!")
+        }
+    }
+
+    private fun selectSoundOption(mode: SoundSettingsManager.SoundMode) {
+        SoundSettingsManager.saveSoundSetting(this, mode)
+        updateSoundIcon(mode)
+        toggleSoundMenu()
+        Toast.makeText(this, "${mode.name} Mode Selected", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateSoundIcon(mode: SoundSettingsManager.SoundMode) {
+        val iconRes = when (mode) {
+            SoundSettingsManager.SoundMode.BEEP -> R.drawable.ic_beep
+            SoundSettingsManager.SoundMode.VOICE -> R.drawable.ic_voice
+            SoundSettingsManager.SoundMode.SILENT -> R.drawable.ic_silent
+        }
+        soundIcon.setImageResource(iconRes)
     }
 
 
@@ -729,6 +816,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showSettingsMenuDialog() {
         val dialog = createDialog(R.layout.settings)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val alertModeLayout: LinearLayout? = dialog.findViewById(R.id.layoutAlertMode)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
@@ -738,8 +826,7 @@ class MainActivity : AppCompatActivity() {
 
         val alertSwitch: Switch = dialog.findViewById(R.id.alertSwitch)
         val notificationSwitch: Switch = dialog.findViewById(R.id.notificationSwitch)
-
-
+        
         // Call load states function
         loadSwitchStates(alertSwitch, notificationSwitch)
 
@@ -776,6 +863,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun showHelpdialog() {
         val dialog = createDialog(R.layout.help)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val helpCamera: LinearLayout? = dialog.findViewById(R.id.HelpCameraLayout)
@@ -814,6 +902,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpCameraActivity() {
         val dialog = createDialog(R.layout.help_cameractivity)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -828,6 +917,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpsettings() {
         val dialog = createDialog(R.layout.help_settings)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -842,6 +932,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpprofile() {
         val dialog = createDialog(R.layout.help_profile)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -856,6 +947,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpReporthazard() {
         val dialog = createDialog(R.layout.help_reporthazard)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -870,6 +962,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAlertModeDialog() {
         val dialog = createDialog(R.layout.settings_alertmode)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val roadCrackCheckbox = dialog.findViewById<CheckBox>(R.id.RoadcrackCheckbox)
@@ -923,6 +1016,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileMenuDialog() {
         val dialog = createDialog(R.layout.profile)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val userDetailsLayout: LinearLayout? = dialog.findViewById(R.id.layoutuserdetails)
         val signOutLayout: LinearLayout? = dialog.findViewById(R.id.layoutsignout)
@@ -958,6 +1052,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showUserDetailsDialog() {
         val dialog = createDialog(R.layout.profile_userdetails)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val userPicture: ImageView? = dialog.findViewById(R.id.UserPicture)
@@ -978,7 +1073,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showReportMenuDialog() {
         val dialog = createDialog(R.layout.report_hazard)
-
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         // Top buttons
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
@@ -1073,13 +1168,11 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showReportVerificationDialog(hazardType, location, time, date, bitmap)
         }
-
         // View History Button Action
         viewHistoryButton.setOnClickListener {
             dialog.dismiss()
             showReportHistoryDialog()
         }
-
         // Back/cancel
         backButton.setOnClickListener {
             dialog.dismiss()

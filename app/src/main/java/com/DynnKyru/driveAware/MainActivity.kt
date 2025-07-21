@@ -730,6 +730,7 @@ class MainActivity : AppCompatActivity() {
     //removing this but we might need the code for mappings later
 
     /*
+    codes for map searching in the future
     private fun showBottomDialog() {
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f) // Default to Manila
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f)
@@ -754,47 +755,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
-
-        val menuButton: FloatingActionButton? = dialog.findViewById(R.id.menuButton)
-        menuButton?.setOnClickListener {
-            dialog.dismiss()
-            showMenuBottomDialog()
-        }
     }*/
-    /*
-    private fun showMenuBottomDialog() {
-        val dialog = createDialog(R.layout.bottomsheet_menu)
-
-        val helpButton: ImageView? = dialog.findViewById(R.id.HelpButton)
-        val settingsLayout: LinearLayout? = dialog.findViewById(R.id.layoutSettings)
-        val profileLayout: LinearLayout? = dialog.findViewById(R.id.layoutProfile)
-        val reportLayout: LinearLayout? = dialog.findViewById(R.id.layoutReport)
-        val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
-
-        helpButton?.setOnClickListener {
-            dialog.dismiss()
-            showHelpdialog()
-        }
-        settingsLayout?.setOnClickListener {
-            dialog.dismiss()
-            showSettingsMenuDialog()
-        }
-
-        profileLayout?.setOnClickListener {
-            dialog.dismiss()
-            showProfileMenuDialog()
-        }
-
-        reportLayout?.setOnClickListener {
-            dialog.dismiss()
-            showReportMenuDialog()
-        }
-
-        cancelMenuButton?.setOnClickListener { dialog.dismiss() }
-
-        dialog.show()
-    }*/
-
 
     private fun loadSwitchStates(
         alertSwitch: Switch,

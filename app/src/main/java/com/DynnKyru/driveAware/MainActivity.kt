@@ -38,7 +38,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.DynnKyru.driveAware.Constants.LABELS_PATH
 import com.DynnKyru.driveAware.Constants.MODEL_PATH
 import com.DynnKyru.driveAware.databinding.ActivityMainBinding
@@ -53,12 +52,10 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ToggleButton
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.osmdroid.views.MapView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
-import android.widget.SearchView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.bumptech.glide.Glide
@@ -72,15 +69,15 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.view.animation.OvershootInterpolator
+import com.DynnKyru.driveAware.ui.SoundSettingsManager
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 
 
 class MainActivity : AppCompatActivity() {
-//test change
+
     private lateinit var binding: ActivityMainBinding
-    private var lastDetectionText = "Detecting"
     private val isFrontCamera = false
     private var preview: Preview? = null
     private var imageAnalyzer: ImageAnalysis? = null
@@ -104,6 +101,7 @@ class MainActivity : AppCompatActivity() {
     var selectedDetectionRecord: DetectionRecord? = null
     private var lastMarkerTime = 0L  // For throttling red marker creation only
     private var detectionResultTextSheetView: TextView? = null
+    private var isSignedOut = false
 
 
     // CardView and TextView for heads-up notification
@@ -119,8 +117,15 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show()
             }
         }
-
-
+    private fun getHazardIcon(detection: String): Int {
+        return when (detection) {
+            "Uneven-terrain", "Road-cracks"  -> R.drawable.ic_dia
+            "Speed-Bumps" -> R.drawable.ic_bump
+            "Manholes", "Puddle" -> R.drawable.ic_octa
+            "Potholes" -> R.drawable.ic_pothole
+            else -> R.drawable.ic_detecting
+        }
+    }
     // Enum class for severity levels
     enum class Severity(val color: Int) {
         LOW(R.color.light_green),
@@ -128,6 +133,13 @@ class MainActivity : AppCompatActivity() {
         HIGH(R.color.light_orange),
         CRITICAL(R.color.light_red)
     }
+    //soundmenyu
+    private lateinit var soundButton: MaterialCardView
+    private lateinit var soundIcon: ImageView
+    private lateinit var voiceButton: MaterialCardView
+    private lateinit var beepButton: MaterialCardView
+    private lateinit var silentButton: MaterialCardView
+
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -153,6 +165,8 @@ class MainActivity : AppCompatActivity() {
         notificationBackground.alpha = 1f
         notificationBackground.visibility = View.VISIBLE
 
+        setupMapButton(binding.mapButton)
+        setupSettingsButton(binding.settingsButton)
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -168,36 +182,54 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.notif_sound)
+        val isGpuToggle: ToggleButton = findViewById(R.id.isGpu)
+        // Set up the listener for the GPU toggle button
+        isGpuToggle.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
+            cameraExecutor.submit {
+                detector?.restart(isGpu = isChecked)
+            }
+            // Change the background color of the ToggleButton based on the checked state
+            val backgroundColor = if (isChecked) {
+                ContextCompat.getColor(baseContext, R.color.light_blue) // On color
+            } else {
+                ContextCompat.getColor(baseContext, R.color.Trans_white) // Off color
+            }
+
+            // Update the backgroundTint using the appropriate color
+            buttonView.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+        }
+        // SOoooooooooooooooooooooooooooooooooUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUND
+        soundButton = findViewById(R.id.soundButton)
+        soundIcon = findViewById(R.id.soundIcon)
+        voiceButton = findViewById(R.id.voiceButton)
+        beepButton = findViewById(R.id.beepButton)
+        silentButton = findViewById(R.id.silentButton)
+
+        // Load saved sound setting
+        val savedMode = SoundSettingsManager.getCurrentSoundSetting(this)
+        updateSoundIcon(savedMode)
+
+        soundButton.setOnClickListener {
+            toggleSoundMenu()
+        }
+        beepButton.setOnClickListener {
+            selectSoundOption(SoundSettingsManager.SoundMode.BEEP)
+        }
+        voiceButton.setOnClickListener {
+            selectSoundOption(SoundSettingsManager.SoundMode.VOICE)
+        }
+
+        silentButton.setOnClickListener {
+            selectSoundOption(SoundSettingsManager.SoundMode.SILENT)
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-        binding.fab.setOnClickListener {
-            val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.bottomsheetlayout, null)
-            dialog.setContentView(view)
-
-            val mapView = view.findViewById<MapView>(R.id.map)
-
-            dialog.setOnShowListener {
-                mapView.postDelayed({
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                        MapManager.setupMap(this, mapView, 14.5995, 120.9842, detectionRecords)
-                    } else {
-                        Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show()
-                    }
-                }, 500)
-            }
-
-            dialog.show()
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -223,8 +255,6 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
-
-
         // Initialize notification components
         notificationBanner = findViewById(R.id.detectionNotificationCard)
         notificationText = findViewById(R.id.detectionNotificationText)
@@ -233,10 +263,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<CardView>(R.id.detectionNotificationCard)?.setOnClickListener {
             hideNotification()
         }
-
-
-        // Floating Action Button for showing bottom dialog
-        binding.fab.setOnClickListener { showBottomDialog() }
     }
 
     private val imagePickerLauncher = registerForActivityResult(
@@ -334,6 +360,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onDetectWithBitmap(rotatedBitmap: Bitmap) {
+        if (isSignedOut) return  // 🚫 Prevent TFLite from running after sign-out
+
         detector?.detect(rotatedBitmap)
 
         val now = System.currentTimeMillis()
@@ -377,7 +405,6 @@ class MainActivity : AppCompatActivity() {
                 longitude = 0.0,
                 timestamp = timestamp
             )
-
             detectionRecords.add(record)
             Log.w("DetectionLog", "⚠️ Detection saved without GPS")
         }
@@ -389,8 +416,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        // 👇 Release MediaPlayer
         mediaPlayer?.release()
         mediaPlayer = null
 
@@ -425,15 +450,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getHazardIcon(detection: String): Int {
-        return when (detection) {
-            "Uneven-terrain", "Road-cracks"  -> R.drawable.ic_dia
-            "Speed-Bumps" -> R.drawable.ic_bump
-            "Manholes", "Puddle" -> R.drawable.ic_octa
-            "Potholes" -> R.drawable.ic_pothole
-            else -> R.drawable.ic_detecting
-        }
-    }
     private var lastDetectionTime = 0L
     private val detectionInterval = 4000 // Adjust time in milliseconds (e.g., 4000ms = 4 seconds)
 
@@ -454,33 +470,89 @@ class MainActivity : AppCompatActivity() {
 
                 showNotification("$detectedClass detected! Severity: ${severity.name}")
 
-                // ✅ Check if alert switch is ON
+                // Check if alert switch is ON
                 val isAlertEnabled = sharedPreferences.getBoolean(ALERT_KEY, true)
-
-                // ✅ Play sound only if alerts are enabled AND severity is MEDIUM or HIGH
+                mediaPlayer?.release()
+                mediaPlayer = null
+                val selectedMode = SoundSettingsManager.getCurrentSoundSetting(this)
+                // Play sound only if alerts are enabled AND severity is MEDIUM or HIGH
                 if (isAlertEnabled && (severity == Severity.CRITICAL || severity == Severity.HIGH)) {
-                    mediaPlayer?.start()
+                    when (selectedMode) {
+                        SoundSettingsManager.SoundMode.BEEP -> {
+                            mediaPlayer = MediaPlayer.create(this, R.raw.notif_sound)
+                            mediaPlayer?.start()
+                        }
+                        SoundSettingsManager.SoundMode.VOICE -> {
+                            mediaPlayer = MediaPlayer.create(this, R.raw.notif_voice)
+                            mediaPlayer?.start()
+                        }
+                        SoundSettingsManager.SoundMode.SILENT -> {
+                            // Do nothing
+                        }
+                    }
                 }
 
-                if (severity == Severity.HIGH) vibratePhone()
+                if (severity == Severity.CRITICAL) vibratePhone()
 
-                // Update UI (NEEEEEEEEED TOOOOOOO CHAAAAAAAAAANGHEE)
-                findViewById<TextView>(R.id.detectionResultTextMain)?.text = "Detecting: $detectionText"
-                detectionResultTextSheetView?.text = "Detecting: $detectionText"
-                lastDetectionText = "Detecting: $detectionText"
-
+                // Update UI (medyo oke na
                 binding.overlay.apply {
                     setResults(listOf(detectedBox))
                     invalidate()
                 }
             } else {
                 hideNotification()
-                findViewById<TextView>(R.id.detectionResultTextMain)?.text = "Detecting"
                 detectionResultTextSheetView?.text = "Detecting"
             }
 
-            binding.inferenceTime.text = "${inferenceTime}ms"
         }
+    }
+
+    private var isSoundMenuExpanded = false
+    private fun toggleSoundMenu() {
+        val options = listOf(voiceButton, beepButton, silentButton)
+        if (::voiceButton.isInitialized && ::beepButton.isInitialized && ::silentButton.isInitialized) {
+            if (isSoundMenuExpanded) {
+                options.forEach { button ->
+                    button.animate()
+                        .translationX(100f)
+                        .alpha(0f)
+                        .setDuration(200)
+                        .withEndAction { button.visibility = View.GONE }
+                        .start()
+                }
+            } else {
+                val baseOffset = 70f
+                options.forEachIndexed { index, button ->
+                    button.visibility = View.VISIBLE
+                    button.alpha = 0f
+                    button.translationX = baseOffset * (index + 1)
+                    button.animate()
+                        .translationX(0f)
+                        .alpha(1f)
+                        .setDuration(300)
+                        .start()
+                }
+            }
+            isSoundMenuExpanded = !isSoundMenuExpanded
+        } else {
+            Log.e("SoundMenu", "Buttons not initialized!")
+        }
+    }
+
+    private fun selectSoundOption(mode: SoundSettingsManager.SoundMode) {
+        SoundSettingsManager.saveSoundSetting(this, mode)
+        updateSoundIcon(mode)
+        toggleSoundMenu()
+        Toast.makeText(this, "${mode.name} Mode Selected", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateSoundIcon(mode: SoundSettingsManager.SoundMode) {
+        val iconRes = when (mode) {
+            SoundSettingsManager.SoundMode.BEEP -> R.drawable.ic_beep
+            SoundSettingsManager.SoundMode.VOICE -> R.drawable.ic_voice
+            SoundSettingsManager.SoundMode.SILENT -> R.drawable.ic_silent
+        }
+        soundIcon.setImageResource(iconRes)
     }
 
 
@@ -564,6 +636,48 @@ class MainActivity : AppCompatActivity() {
             }
             .start()
     }
+    //to help show the map
+    private fun showMapContainerSheet() {
+        val dialog = Dialog(this).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(R.layout.mapcontainer)
+            setCancelable(true)
+        }
+
+        // Fix window settings here
+        dialog.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.windowAnimations = R.style.DialogAnimation
+        }
+
+        val mapView = dialog.findViewById<MapView>(R.id.map)
+        val backBtn = dialog.findViewById<ImageView>(R.id.backBtn)
+
+        val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f).toDouble()
+        val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f).toDouble()
+
+        MapManager.clearSearchState()
+        loadReportedDetectionsFromFirebase {
+            MapManager.setupMap(this, mapView, lat, lon, detectionRecords)
+        }
+        backBtn.setOnClickListener { dialog.dismiss() }
+        dialog.setOnShowListener { mapView.onResume() }
+        dialog.setOnDismissListener { mapView.onPause() }
+        dialog.show()
+    }
+    // Pass in the view if you want, but you can also just look it up by ID.
+    private fun setupMapButton(btn: View? = null) {
+        val mapBtn = (btn ?: findViewById<MaterialCardView>(R.id.mapButton))
+        mapBtn.setOnClickListener { showMapContainerSheet() }
+    }
+    // SETTINGS BUTTON
+    private fun setupSettingsButton(btn: MaterialCardView) {
+        btn.setOnClickListener {
+            showSettingsMenuDialog()
+        }
+    }
+
 
 
     private fun toast(message: String) {
@@ -587,7 +701,7 @@ class MainActivity : AppCompatActivity() {
                     val imageUrl = doc.getString("imageUrl") ?: ""
                     val timestamp = System.currentTimeMillis()
 
-                    // ✅ Remove duplicate red markers at this location
+                    // Remove duplicate red markers at this location
                     //detectionRecords.removeAll { local ->
                     //    !local.isReported &&
                     //           Math.abs(local.latitude - lat) < 0.000001 &&
@@ -610,26 +724,21 @@ class MainActivity : AppCompatActivity() {
                 onComplete()
             }
             .addOnFailureListener { e ->
-                Log.e("FirebaseLoad", "❌ Failed to load reports: ${e.message}", e)
+                Log.e("FirebaseLoad", "Failed to load reports: ${e.message}", e)
                 onComplete()
             }
 
     }
 
+    //removing this but we might need the code for mappings later
 
+    /*
+    codes for map searching in the future
     private fun showBottomDialog() {
-        val dialog = createDialog(R.layout.bottomsheetlayout)
-        dialog.show()
-        val mapView = dialog.findViewById<MapView>(R.id.map)
-        val searchView = dialog.findViewById<SearchView>(R.id.searchView)
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f) // Default to Manila
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f)
-        val detectionTextView = dialog.findViewById<TextView>(R.id.detectionResultTextSheet)
-        detectionResultTextSheetView = detectionTextView  // Save reference
-        detectionTextView?.text = lastDetectionText
-
         // Set initial user location
-        MapManager.clearSearchState()  // Add this right before setupMap
+        MapManager.clearSearchState()  // 👈 Add this right before setupMap
         loadReportedDetectionsFromFirebase {
             MapManager.setupMap(this, mapView, lat.toDouble(), lon.toDouble(), detectionRecords)
         }
@@ -641,7 +750,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.isNullOrEmpty() && MapManager.isSearchActive()) {
                     MapManager.resetToUserLocation(this@MainActivity, mapView, detectionRecords)
@@ -650,62 +758,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
-
-        val menuButton: FloatingActionButton? = dialog.findViewById(R.id.menuButton)
-        menuButton?.setOnClickListener {
-            dialog.dismiss()
-            showMenuBottomDialog()
-        }
-    }
-
-    private fun showMenuBottomDialog() {
-        val dialog = createDialog(R.layout.bottomsheet_menu)
-        val isGpuToggle: ToggleButton = dialog.findViewById(R.id.isGpu)
-        val helpButton: ImageView? = dialog.findViewById(R.id.HelpButton)
-        val settingsLayout: LinearLayout? = dialog.findViewById(R.id.layoutSettings)
-        val profileLayout: LinearLayout? = dialog.findViewById(R.id.layoutProfile)
-        val reportLayout: LinearLayout? = dialog.findViewById(R.id.layoutReport)
-        val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
-
-        helpButton?.setOnClickListener {
-            dialog.dismiss()
-            showHelpdialog()
-        }
-        settingsLayout?.setOnClickListener {
-            dialog.dismiss()
-            showSettingsMenuDialog()
-        }
-
-        profileLayout?.setOnClickListener {
-            dialog.dismiss()
-            showProfileMenuDialog()
-        }
-
-        reportLayout?.setOnClickListener {
-            dialog.dismiss()
-            showReportMenuDialog()
-        }
-        // Set up the listener for the GPU toggle button
-        isGpuToggle.setOnCheckedChangeListener { buttonView: CompoundButton, isChecked: Boolean ->
-            cameraExecutor.submit {
-                detector?.restart(isGpu = isChecked)
-            }
-
-            // Change the background color of the ToggleButton based on the checked state
-            val backgroundColor = if (isChecked) {
-                ContextCompat.getColor(baseContext, R.color.green) // On color
-            } else {
-                ContextCompat.getColor(baseContext, R.color.white) // Off color
-            }
-
-            // Update the backgroundTint using the appropriate color
-            buttonView.backgroundTintList = ColorStateList.valueOf(backgroundColor)
-        }
-        cancelMenuButton?.setOnClickListener { dialog.dismiss() }
-
-        dialog.show()
-    }
-
+    }*/
 
     private fun loadSwitchStates(
         alertSwitch: Switch,
@@ -727,15 +780,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun showSettingsMenuDialog() {
         val dialog = createDialog(R.layout.settings)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val alertModeLayout: LinearLayout? = dialog.findViewById(R.id.layoutAlertMode)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val helpLayout: LinearLayout? = dialog.findViewById(R.id.layoutHelp)
+        val profileLayout: LinearLayout? = dialog.findViewById(R.id.layoutProfile)
+        val reportLayout: LinearLayout? = dialog.findViewById(R.id.layoutReport)
 
         val alertSwitch: Switch = dialog.findViewById(R.id.alertSwitch)
         val notificationSwitch: Switch = dialog.findViewById(R.id.notificationSwitch)
-
-
+        
         // Call load states function
         loadSwitchStates(alertSwitch, notificationSwitch)
 
@@ -747,12 +802,16 @@ class MainActivity : AppCompatActivity() {
             isNotificationEnabled = isChecked
             sharedPreferences.edit().putBoolean(NOTIFICATION_KEY, isChecked).apply()
         }
-
-
-
+        profileLayout?.setOnClickListener {
+            dialog.dismiss()
+            showProfileMenuDialog()
+        }
+        reportLayout?.setOnClickListener {
+            dialog.dismiss()
+            showReportMenuDialog()
+        }
         backButton?.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog() // Go back to main menu
         }
         alertModeLayout?.setOnClickListener {
             dialog.dismiss()
@@ -768,6 +827,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun showHelpdialog() {
         val dialog = createDialog(R.layout.help)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val helpCamera: LinearLayout? = dialog.findViewById(R.id.HelpCameraLayout)
@@ -777,7 +837,7 @@ class MainActivity : AppCompatActivity() {
 
         backButton?.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog() // Go back to main menu
+            showSettingsMenuDialog() // Go back to main menu
         }
 
         helpCamera?.setOnClickListener {
@@ -806,6 +866,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpCameraActivity() {
         val dialog = createDialog(R.layout.help_cameractivity)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -820,6 +881,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpsettings() {
         val dialog = createDialog(R.layout.help_settings)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -834,6 +896,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpprofile() {
         val dialog = createDialog(R.layout.help_profile)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -848,6 +911,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpReporthazard() {
         val dialog = createDialog(R.layout.help_reporthazard)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -862,6 +926,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAlertModeDialog() {
         val dialog = createDialog(R.layout.settings_alertmode)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val roadCrackCheckbox = dialog.findViewById<CheckBox>(R.id.RoadcrackCheckbox)
@@ -915,28 +980,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileMenuDialog() {
         val dialog = createDialog(R.layout.profile)
+        dialog.window?.apply { attributes.windowAnimations = R.style.DialogAnimation }
+
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val userDetailsLayout: LinearLayout? = dialog.findViewById(R.id.layoutuserdetails)
         val signOutLayout: LinearLayout? = dialog.findViewById(R.id.layoutsignout)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
+
         userDetailsLayout?.setOnClickListener {
             dialog.dismiss()
             showUserDetailsDialog()
         }
 
         signOutLayout?.setOnClickListener {
-            // Sign out Firebase user
-            FirebaseAuth.getInstance().signOut()
+            isSignedOut = true // prevent detection during shutdown
+            cameraExecutor.shutdownNow() // immediately stop analyzing frames
 
-            // Dismiss the dialog
+            FirebaseAuth.getInstance().signOut()
             dialog.dismiss()
 
-            // Redirect to login/signup screen
             val intent = Intent(this, LoginNSignup::class.java)
-            intent.putExtra("showSignup", false) // show login screen
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra("showSignup", false)
             startActivity(intent)
-            finish() // Prevent going back to MainActivity
+            finish()
         }
+
 
         cancelMenuButton?.setOnClickListener { dialog.dismiss() }
 
@@ -944,12 +1013,14 @@ class MainActivity : AppCompatActivity() {
 
         backButton?.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog()
+            showSettingsMenuDialog()
         }
     }
 
+
     private fun showUserDetailsDialog() {
         val dialog = createDialog(R.layout.profile_userdetails)
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val userPicture: ImageView? = dialog.findViewById(R.id.UserPicture)
@@ -970,7 +1041,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showReportMenuDialog() {
         val dialog = createDialog(R.layout.report_hazard)
-
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         // Top buttons
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
@@ -1014,9 +1085,9 @@ class MainActivity : AppCompatActivity() {
                 val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
                 reportImage.setImageBitmap(bitmap)
                 selectedReportBitmap = bitmap
-                Log.d("AutoImageLoad", "✅ Loaded image from $path")
+                Log.d("AutoImageLoad", " Loaded image from $path")
             } else {
-                Log.w("AutoImageLoad", "⚠️ Image file does not exist at $path")
+                Log.w("AutoImageLoad", " Image file does not exist at $path")
             }
         }
 
@@ -1033,7 +1104,7 @@ class MainActivity : AppCompatActivity() {
 
         // Buttons
         val reportButton: Button = dialog.findViewById(R.id.Reportbutton)
-        val viewHistoryButton: Button = dialog.findViewById(R.id.ViewhistoryButton) // ✅ New line
+        val viewHistoryButton: Button = dialog.findViewById(R.id.ViewhistoryButton) // New line
 
         reportButton.setOnClickListener {
             // Dynamically set hazard type from checkboxes
@@ -1065,17 +1136,15 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showReportVerificationDialog(hazardType, location, time, date, bitmap)
         }
-
         // View History Button Action
         viewHistoryButton.setOnClickListener {
             dialog.dismiss()
             showReportHistoryDialog()
         }
-
         // Back/cancel
         backButton.setOnClickListener {
             dialog.dismiss()
-            showBottomDialog()
+            showSettingsMenuDialog()
         }
         cancelMenuButton.setOnClickListener { dialog.dismiss() }
 
@@ -1195,11 +1264,11 @@ class MainActivity : AppCompatActivity() {
                 .set(reportData)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Report saved!", Toast.LENGTH_SHORT).show()
-                    Log.d("FirebaseReport", "✅ Report saved with ID: $reportId")
+                    Log.d("FirebaseReport", " Report saved with ID: $reportId")
 
                     // Mark detection as reported
                     selectedDetectionRecord?.isReported = true
-                    Log.d("ReportStatus", "✅ Detection marked as reported: ${selectedDetectionRecord?.anomalyType}")
+                    Log.d("ReportStatus", " Detection marked as reported: ${selectedDetectionRecord?.anomalyType}")
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Failed to save report", Toast.LENGTH_SHORT).show()
@@ -1314,7 +1383,7 @@ class MainActivity : AppCompatActivity() {
 
     fun Notificationsswitch(view: View) {
         val switch = view as Switch
-        isNotificationEnabled = switch.isChecked // ✅ Update the flag
+        isNotificationEnabled = switch.isChecked // Update the flag
 
         if (!isNotificationEnabled) {
             hideNotification() // Hide any active notifications

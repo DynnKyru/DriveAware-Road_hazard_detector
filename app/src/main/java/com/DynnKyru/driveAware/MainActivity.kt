@@ -68,6 +68,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import com.DynnKyru.driveAware.ui.SoundSettingsManager
 import com.google.android.material.card.MaterialCardView
@@ -450,7 +451,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var lastDetectionTime = 0L
-    private val detectionInterval = 2000 // Adjust time in milliseconds (e.g., 4000ms = 4 seconds)
+    private val detectionInterval = 4000 // Adjust time in milliseconds (e.g., 4000ms = 4 seconds)
 
     fun onDetect(boundingBoxes: List<BoundingBox>, inferenceTime: Long) {
         val currentTime = System.currentTimeMillis()
@@ -776,6 +777,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun Context.createDialog(layoutId: Int): Dialog {
+        val dialog = Dialog(this,android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
+        dialog.setContentView(layoutId)
+
+        dialog.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
+        dialog.setCancelable(true)
+        return dialog
+    }
 
     private fun showSettingsMenuDialog() {
         val dialog = createDialog(R.layout.settings)
@@ -910,7 +926,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpReporthazard() {
         val dialog = createDialog(R.layout.help_reporthazard)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -925,7 +940,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAlertModeDialog() {
         val dialog = createDialog(R.layout.settings_alertmode)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val roadCrackCheckbox = dialog.findViewById<CheckBox>(R.id.RoadcrackCheckbox)
@@ -979,7 +993,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileMenuDialog() {
         val dialog = createDialog(R.layout.profile)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val userDetailsLayout: LinearLayout? = dialog.findViewById(R.id.layoutuserdetails)
         val signOutLayout: LinearLayout? = dialog.findViewById(R.id.layoutsignout)
@@ -1016,7 +1029,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showUserDetailsDialog() {
         val dialog = createDialog(R.layout.profile_userdetails)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val userPicture: ImageView? = dialog.findViewById(R.id.UserPicture)
@@ -1037,7 +1049,6 @@ class MainActivity : AppCompatActivity() {
 
     fun showReportMenuDialog() {
         val dialog = createDialog(R.layout.report_hazard)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         // Top buttons
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
@@ -1222,7 +1233,6 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showReportMenuDialog()
         }
-
         dialog.show()
     }
 
@@ -1400,24 +1410,6 @@ class MainActivity : AppCompatActivity() {
         val switch = view as Switch
         val isChecked = switch.isChecked
         Toast.makeText(this, if (isChecked) "Night Mode Enabled" else "Night Mode Disabled", Toast.LENGTH_SHORT).show()
-    }
-    fun Context.createDialog(layoutId: Int): Dialog {
-        val dialog = Dialog(this, android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
-        dialog.setContentView(layoutId)
-
-        // Make background transparent only if your layout has its own background (e.g. rounded corners)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        // Set layout size to fullscreen
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT // Change from WRAP_CONTENT to MATCH_PARENT
-        )
-
-        // Disable outside touch to dismiss if needed
-        dialog.setCancelable(true)
-
-        return dialog
     }
 
 

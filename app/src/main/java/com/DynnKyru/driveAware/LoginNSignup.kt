@@ -31,13 +31,26 @@ class LoginNSignup : AppCompatActivity() {
 
         // Decide whether to show login or signup layout
         val showSignup = intent.getBooleanExtra("showSignup", false)
-        
+
+
         if (showSignup) {
             setContentView(R.layout.signup)
             setupSignup()
         } else {
             setContentView(R.layout.login)
             setupLogin()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // User already signed in, redirect to MainActivity
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -55,18 +68,20 @@ class LoginNSignup : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Reset field appearance
+            passwordField.setBackgroundTintList(getColorStateList(android.R.color.white))
+            passwordField.error = null
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
-
-                        // Navigate to MainActivity here
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                        finish() // Optional: prevent returning to login on back press
-
+                        finish()
                     } else {
-                        Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                        passwordField.setBackgroundTintList(getColorStateList(android.R.color.holo_red_light))
+                        passwordField.error = "Wrong password"
                     }
                 }
         }
@@ -79,6 +94,7 @@ class LoginNSignup : AppCompatActivity() {
             finish()
         }
     }
+
 
     private fun setupSignup() {
         val fullNameField = findViewById<EditText>(R.id.fullNameField)

@@ -25,20 +25,20 @@
 
         <ImageView
             android:id="@+id/Backbutton"
-            android:clickable="true"
             android:layout_width="30dp"
-            android:layout_height="40dp"
+            android:layout_height="26dp"
+            android:clickable="true"
             android:src="@drawable/back_arrow"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <!-- Cancel (X) Button -->
         <ImageView
             android:id="@+id/cancelMenuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="27dp"
+            android:layout_height="25dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_baseline_clear_24" />
+            android:layout_marginEnd="1dp"
+            android:src="@drawable/ic_exit" />
     </RelativeLayout>
 
     <!-- Title -->

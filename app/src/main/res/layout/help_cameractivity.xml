@@ -8,6 +8,8 @@
     android:background="@drawable/dialogbg">
 
     <!-- ✅ Top Bar -->
+
+    <!-- Title -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,28 +22,28 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:backgroundTint="@color/black"
-            android:src="@drawable/ic_round_remove_24"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_round_remove_24" />
 
-        <ImageView
-            android:id="@+id/Backbutton"
-            android:clickable="true"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:src="@drawable/back_arrow"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
         <!-- Cancel (X) Button -->
         <ImageView
+            android:id="@+id/Backbutton"
+            android:layout_width="32dp"
+            android:layout_height="25dp"
+            android:clickable="true"
+            android:src="@drawable/back_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/cancelMenuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_baseline_clear_24" />
+            android:src="@drawable/ic_exit" />
     </RelativeLayout>
 
-    <!-- Title -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

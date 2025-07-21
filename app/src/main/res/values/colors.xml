@@ -12,18 +12,19 @@
     <color name="red">#FF0000</color> <!-- HIGH Severity -->
 
     <!-- Colors -->
-        <color name="purple_200">#FFBB86FC</color>
-        <color name="purple_500">#FF6200EE</color>
-        <color name="purple_700">#FF3700B3</color>
-        <color name="teal_200">#FF03DAC5</color>
-        <color name="teal_700">#FF018786</color>
-        <color name="lavender">#8692f7</color>
-        <color name="green">#00ff00</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#0300C5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="lavender">#8692f7</color>
+    <color name="green">#00ff00</color>
     <color name="light_green">#B4FFAD</color>
     <color name="light_yellow">#FFED68</color>
     <color name="light_orange">#FFA352</color>
     <color name="light_red">#FF3636</color>
     <color name="transparent_black">#00000000</color>">
-
+    <color name="light_blue">#a5bdd6</color>">
+    <color name="Trans_white">#4DFFFFFF</color>">
 
 </resources>

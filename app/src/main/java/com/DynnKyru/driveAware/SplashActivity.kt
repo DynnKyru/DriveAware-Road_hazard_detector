@@ -54,7 +54,7 @@ class SplashActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // ANIMATIOOOOOOOOOOOOON PAGAWAAAAAAAAAAAAAAAAA
-        /*
+/*
         val backgroundImage = findViewById<ImageView>(R.id.splashBackground)
 
         val animation = ObjectAnimator.ofFloat(
@@ -70,16 +70,9 @@ class SplashActivity : AppCompatActivity() {
         }
 
         animation.start()
-        */
+*/
 
-        // Check if user is already logged in
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            // Already logged in – skip login screen
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return
-        }
+
 
         // View bindings
         progressBar = findViewById(R.id.progressBar)
@@ -114,17 +107,24 @@ class SplashActivity : AppCompatActivity() {
                 if (progress < 100) {
                     progress++
                     progressBar.progress = progress
-                    handler.postDelayed(this, 60) // Smooth interval (~6s total)
+                    handler.postDelayed(this, 60) // Smooth 6-second animation
                 } else {
-                    //  Go to login/signup if not logged in
-                    val intent = Intent(this@SplashActivity, LoginNSignup::class.java)
-                    intent.putExtra("showSignup", false)
-                    startActivity(intent)
+                    // Now decide where to go AFTER splash animation
+                    val nextActivity = if (auth.currentUser != null) {
+                        Intent(this@SplashActivity, MainActivity::class.java)
+                    } else {
+                        Intent(this@SplashActivity, LoginNSignup::class.java).apply {
+                            putExtra("showSignup", false)
+                        }
+                    }
+
+                    startActivity(nextActivity)
                     finish()
                 }
             }
         })
     }
+
 
     private fun showTips() {
         for (i in tips.indices) {

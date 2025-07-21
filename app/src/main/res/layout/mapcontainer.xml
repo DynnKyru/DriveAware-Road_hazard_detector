@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="380dp"
+        android:layout_height="740dp"
+        android:layout_gravity="bottom|center_horizontal"
+        app:cardCornerRadius="17dp"
+        app:cardElevation="10dp"
+        android:background="@drawable/dialogbg"
+        android:layout_marginBottom="15dp"
+        android:layout_marginHorizontal="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:background="@android:color/white">
+
+            <!-- Top Bar -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:id="@+id/mapTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/map"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/backBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    android:src="@drawable/back_arrow" />
+
+                <!-- Underline -->
+                <View
+                    android:id="@+id/mapUnderline"
+                    android:layout_width="80dp"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/mapTitle"
+                    android:layout_alignStart="@id/mapTitle"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="0dp"
+                    android:background="#000000" />
+
+            </RelativeLayout>
+            <!-- Map View -->
+            <org.osmdroid.views.MapView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

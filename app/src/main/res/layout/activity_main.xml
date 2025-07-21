@@ -40,7 +40,7 @@
         android:id="@+id/detectingLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Detecting..."
+        android:text="@string/detecting"
         android:textColor="@android:color/white"
         android:textSize="19sp"
 		android:padding="3dp"
@@ -74,7 +74,6 @@
             android:id="@+id/detectionIcon"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/alert"
             app:tint="@android:color/white"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="4dp"/>
@@ -83,7 +82,7 @@
             android:id="@+id/detectionNotificationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Detected!"
+            android:text="@string/detected"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:gravity="center_horizontal"
@@ -121,71 +120,192 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- Detection Bottom Panel -->
-    <LinearLayout
-        android:id="@+id/bottomBorder"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:background="@drawable/dialogbg"
-        android:orientation="vertical"
-        android:paddingTop="32dp"
-        android:paddingBottom="20dp"
-        android:paddingHorizontal="20dp"
-        android:elevation="8dp"
-        android:gravity="center_horizontal"
+    <!--Map Button -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mapButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="1dp"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.77"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintEnd_toEndOf="parent"
+    >
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_map"/>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <!--Settings Button -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/settingsButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="1dp"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.86"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_settings"/>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <!--Sound Button -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/soundMenuContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_foreground"
+        app:layout_constraintTop_toBottomOf="@id/settingsButton"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/binding"
-            android:backgroundTint="@color/white"
+        <!-- BEEP -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/beepButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/voiceButton"
+            android:layout_marginEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_beep"
+                android:contentDescription="Beep mode"/>
+        </com.google.android.material.card.MaterialCardView>
+        <!-- VOICE -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/voiceButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/soundButton"
+            android:layout_marginEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_voice"
+                android:contentDescription="Voice mode"/>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- SILENT -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/silentButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/beepButton"
+            android:layout_marginEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_silent"
+                android:contentDescription="Silent mode"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- MAIN SOUND BUTTON -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/soundButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:clickable="true"
             android:focusable="true"
-            android:translationY="-22dp"
-            app:maxImageSize="40dp"
-            app:layout_constraintBottom_toTopOf="@id/bottomBorder"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:rippleColor="@android:color/white"/>
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_gravity="left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:translationY="-22dp"
-            android:gravity="center_vertical">
+            <ImageView
+                android:id="@+id/soundIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="Sound Icon"
+                android:src="@drawable/ic_sound"/>
+        </com.google.android.material.card.MaterialCardView>
 
-            <!-- Speed Text -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Speed:"
-                android:textColor="@color/black"
-                android:layout_marginEnd="8dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Inference Time Text -->
-            <TextView
-                android:id="@+id/inferenceTime"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="calculating..." />
-        </LinearLayout>
+    <!-- GPU -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/gpuCard"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
 
-        <!-- Detection TextViews -->
-        <TextView
-            android:id="@+id/detectionResultTextMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/soundMenuContainer"
+        app:layout_constraintTop_toTopOf="@+id/soundMenuContainer">
+        <FrameLayout
             android:layout_width="match_parent"
-            android:padding="0dp"
-            android:layout_height="40dp"
-            android:text="Detecting"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:layout_height="match_parent">
+        <ToggleButton
+            android:id="@+id/isGpu"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circular_toggle_background"
+            android:checked="true"
+            android:textColor="@android:color/black"
+            android:textOff="@string/gpu"
+            android:textOn="@string/gpu"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

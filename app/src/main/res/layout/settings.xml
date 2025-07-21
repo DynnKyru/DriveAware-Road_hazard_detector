@@ -1,73 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/dialogbg">
+    android:padding="12dp"
+    android:background="@color/white">
 
-    <!-- ✅ Top Bar -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
 
-        <!-- Center Top Button -->
-        <ImageView
-            android:id="@+id/topCenterButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:backgroundTint="@color/black"
-            android:src="@drawable/ic_round_remove_24"
-            android:scaleType="centerCrop" />
 
-        <ImageView
-            android:id="@+id/Backbutton"
-            android:clickable="true"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:src="@drawable/back_arrow"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-        <!-- Cancel (X) Button -->
-        <ImageView
-            android:id="@+id/cancelMenuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_baseline_clear_24" />
-    </RelativeLayout>
+    <!-- ✅ Combined Back Button + Title -->
 
-    <!-- Title -->
+    <!-- User Profile Settings -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:paddingBottom="8dp">
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
+
+
+    <ImageView
+            android:id="@+id/Backbutton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="-1dp"
+            android:clickable="true"
+            android:src="@drawable/back_arrow" />
+
 
         <TextView
             android:id="@+id/menuTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="105dp"
             android:text="Settings"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
+    </LinearLayout>
+    <!-- Profile -->
+    <LinearLayout
+        android:id="@+id/layoutProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_gray"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="34dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/profile" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="User Profile Settings"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Report -->
+    <LinearLayout
+        android:id="@+id/layoutReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border_gray"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical"
+        android:padding="18dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/report" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Report"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- ✅ Alert Toggle -->
     <LinearLayout
         android:id="@+id/layoutAlerts"
-        android:orientation="horizontal"
+        android:layout_marginTop="58dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -78,29 +125,31 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
             android:text="Alert"
             android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <Switch
             android:id="@+id/alertSwitch"
-            android:theme="@style/CustomSwitchStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="Alertswitch" />
+            android:onClick="Alertswitch"
+            android:theme="@style/CustomSwitchStyle" />
     </LinearLayout>
 
     <!-- ✅ Alert Mode -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutAlertMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -121,22 +170,24 @@
             android:id="@+id/AlertmodeButton"
             android:layout_width="40dp"
             android:layout_height="30dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/right_arrow"
+            android:layout_centerVertical="true"
             android:layout_gravity="end"
-            android:layout_centerVertical="true"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/right_arrow" />
 
     </LinearLayout>
 
     <!-- ✅ Notification Toggle -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutNotification"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -147,28 +198,30 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
             android:text="Notification:"
             android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <Switch
             android:id="@+id/notificationSwitch"
-            android:theme="@style/CustomSwitchStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="Notificationsswitch" />
+            android:onClick="Notificationsswitch"
+            android:theme="@style/CustomSwitchStyle" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutHelp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -189,21 +242,23 @@
             android:id="@+id/HelpButton"
             android:layout_width="40dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/right_arrow"
-            android:layout_centerVertical="true" />
+            android:src="@drawable/right_arrow" />
 
     </LinearLayout>
 
     <!-- ✅ Reset -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutReset"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -214,30 +269,32 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
             android:text="Reset"
             android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/ResetButton"
             android:layout_width="40dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/right_arrow"
-            android:layout_centerVertical="true" />
+            android:src="@drawable/right_arrow" />
     </LinearLayout>
 
     <!-- ✅ External Camera Option -->
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:id="@+id/layoutExternalCamera"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -248,20 +305,22 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
             android:text="Choose External Camera"
             android:textColor="@color/black"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:layout_weight="1" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/ChooseExternalCameraButton"
             android:layout_width="40dp"
             android:layout_height="30dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/right_arrow"
+            android:layout_centerVertical="true"
             android:layout_gravity="end"
-            android:layout_centerVertical="true" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/right_arrow" />
+
+
     </LinearLayout>
 
 </LinearLayout>

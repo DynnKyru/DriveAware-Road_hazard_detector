@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="12dp"
+    android:background="@color/white">
+
+
 
     <!-- ✅ Combined Back Button + Title -->
 
@@ -25,7 +27,7 @@
             android:id="@+id/Backbutton"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginStart="-2dp"
+            android:layout_marginStart="-1dp"
             android:clickable="true"
             android:src="@drawable/back_arrow" />
 
@@ -41,18 +43,18 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
+    <!-- Profile -->
     <LinearLayout
         android:id="@+id/layoutProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/border_gray"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="24dp">
+        android:padding="34dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -77,12 +79,12 @@
         android:id="@+id/layoutReport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/border_gray"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:gravity="center_vertical"
-        android:padding="14dp">
+        android:padding="18dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -105,14 +107,14 @@
     <!-- ✅ Alert Toggle -->
     <LinearLayout
         android:id="@+id/layoutAlerts"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="58dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -147,7 +149,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -185,7 +187,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -219,7 +221,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -256,7 +258,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -292,7 +294,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -317,6 +319,8 @@
             android:layout_gravity="end"
             android:scaleType="fitCenter"
             android:src="@drawable/right_arrow" />
+
+
     </LinearLayout>
 
 </LinearLayout>

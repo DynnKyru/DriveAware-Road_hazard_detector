@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/dialogbg">
@@ -39,7 +39,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="25dp"
             android:src="@drawable/ic_exit" />
     </RelativeLayout>
 
@@ -87,8 +88,8 @@
 
                 <!-- Text Column -->
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="167dp"
+                    android:layout_height="149dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -105,38 +106,38 @@
                         android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Location"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Time"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Date"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Image on the right -->
                 <ImageView
                     android:id="@+id/reportImage"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="174dp"
+                    android:layout_height="175dp"
                     android:layout_marginStart="16dp"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/border_rect" />
+                    android:background="@drawable/border_rect"
+                    android:scaleType="centerCrop" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -151,17 +152,20 @@
 
         <Button
             android:id="@+id/checkButton"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/green"
             android:drawableTop="@drawable/check"
             android:gravity="center" />
 
         <Button
             android:id="@+id/denyButton"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/red"
             android:drawableTop="@drawable/cancel"
             android:gravity="center" />

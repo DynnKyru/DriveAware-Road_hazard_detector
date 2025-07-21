@@ -10,7 +10,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/Backbutton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="-1dp"
+            android:clickable="true"
+            android:src="@drawable/back_arrow" />
 
         <!-- Top Center Button -->
         <ImageView
@@ -29,7 +43,8 @@
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_exit"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="5dp"/>
     </RelativeLayout>
 
     <!-- Title -->

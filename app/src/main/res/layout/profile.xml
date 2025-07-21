@@ -42,6 +42,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="110dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="4dp"
             android:src="@drawable/ic_exit" />
 
     </LinearLayout>
@@ -57,12 +59,12 @@
 
         <LinearLayout
             android:id="@+id/layoutUsername"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="-1dp"
             android:layout_marginTop="20dp"
             android:elevation="4dp"
             android:gravity="center"
-            android:layout_marginStart="-80dp"
             android:orientation="vertical"
             android:padding="20dp">
 

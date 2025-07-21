@@ -360,8 +360,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onDetectWithBitmap(rotatedBitmap: Bitmap) {
-        if (isSignedOut) return  // 🚫 Prevent TFLite from running after sign-out
-
+        if (isSignedOut) return  // Prevent TFLite from running after sign-out
         detector?.detect(rotatedBitmap)
 
         val now = System.currentTimeMillis()
@@ -451,7 +450,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var lastDetectionTime = 0L
-    private val detectionInterval = 4000 // Adjust time in milliseconds (e.g., 4000ms = 4 seconds)
+    private val detectionInterval = 2000 // Adjust time in milliseconds (e.g., 4000ms = 4 seconds)
 
     fun onDetect(boundingBoxes: List<BoundingBox>, inferenceTime: Long) {
         val currentTime = System.currentTimeMillis()
@@ -621,7 +620,7 @@ class MainActivity : AppCompatActivity() {
             .withEndAction {
                 notificationBanner.postDelayed({
                     hideNotification()
-                }, 1000)
+                }, 4000)
             }
             .start()
     }
@@ -629,7 +628,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideNotification() {
         //bannersssgrgrgr
         notificationBanner.animate()
-            .alpha(0f)
+            .alpha(1f)
             .setDuration(6000)
             .withEndAction {
                 notificationBanner.visibility = View.GONE
@@ -790,7 +789,7 @@ class MainActivity : AppCompatActivity() {
 
         val alertSwitch: Switch = dialog.findViewById(R.id.alertSwitch)
         val notificationSwitch: Switch = dialog.findViewById(R.id.notificationSwitch)
-        
+
         // Call load states function
         loadSwitchStates(alertSwitch, notificationSwitch)
 
@@ -980,13 +979,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileMenuDialog() {
         val dialog = createDialog(R.layout.profile)
-        dialog.window?.apply { attributes.windowAnimations = R.style.DialogAnimation }
-
+        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val userDetailsLayout: LinearLayout? = dialog.findViewById(R.id.layoutuserdetails)
         val signOutLayout: LinearLayout? = dialog.findViewById(R.id.layoutsignout)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
-
         userDetailsLayout?.setOnClickListener {
             dialog.dismiss()
             showUserDetailsDialog()
@@ -1016,7 +1013,6 @@ class MainActivity : AppCompatActivity() {
             showSettingsMenuDialog()
         }
     }
-
 
     private fun showUserDetailsDialog() {
         val dialog = createDialog(R.layout.profile_userdetails)

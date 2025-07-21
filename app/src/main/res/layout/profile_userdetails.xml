@@ -18,25 +18,23 @@
         android:paddingStart="8dp"
         android:paddingEnd="24dp"
         android:paddingTop="24dp"
-        android:paddingBottom="1dp">
+        android:paddingBottom="24dp">
+
+        <ImageView
+            android:id="@+id/Backbutton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="-1dp"
+            android:clickable="true"
+            android:src="@drawable/back_arrow" />
 
         <TextView
             android:id="@+id/menuTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="120dp"
+            android:layout_marginStart="85dp"
             android:text="User Details"
             android:textColor="#000000"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/menuTitlee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="Prof"
-            android:textColor="#00000000"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -44,9 +42,9 @@
             android:id="@+id/cancelMenuButton"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_margin="17dp"
-            android:layout_marginEnd="240dp"
+            android:layout_marginStart="60dp"
             android:src="@drawable/ic_exit" />
+
     </LinearLayout>
 
     <!-- Profile Container -->
@@ -105,7 +103,6 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutNamefield"
         android:background="@drawable/border_rounded"
-        android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

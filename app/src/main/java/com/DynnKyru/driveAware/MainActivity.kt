@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
     var selectedDetectionRecord: DetectionRecord? = null
     private var lastMarkerTime = 0L  // For throttling red marker creation only
     private var detectionResultTextSheetView: TextView? = null
+    private var isSignedOut = false
 
 
     // CardView and TextView for heads-up notification
@@ -359,6 +360,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onDetectWithBitmap(rotatedBitmap: Bitmap) {
+        if (isSignedOut) return  // 🚫 Prevent TFLite from running after sign-out
+
         detector?.detect(rotatedBitmap)
 
         val now = System.currentTimeMillis()
@@ -977,29 +980,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileMenuDialog() {
         val dialog = createDialog(R.layout.profile)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
+        dialog.window?.apply { attributes.windowAnimations = R.style.DialogAnimation }
+
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val userDetailsLayout: LinearLayout? = dialog.findViewById(R.id.layoutuserdetails)
         val signOutLayout: LinearLayout? = dialog.findViewById(R.id.layoutsignout)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
+
         userDetailsLayout?.setOnClickListener {
             dialog.dismiss()
             showUserDetailsDialog()
         }
 
         signOutLayout?.setOnClickListener {
-            // Sign out Firebase user
-            FirebaseAuth.getInstance().signOut()
+            isSignedOut = true // prevent detection during shutdown
+            cameraExecutor.shutdownNow() // immediately stop analyzing frames
 
-            // Dismiss the dialog
+            FirebaseAuth.getInstance().signOut()
             dialog.dismiss()
 
-            // Redirect to login/signup screen
             val intent = Intent(this, LoginNSignup::class.java)
-            intent.putExtra("showSignup", false) // show login screen
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra("showSignup", false)
             startActivity(intent)
-            finish() // Prevent going back to MainActivity
+            finish()
         }
+
 
         cancelMenuButton?.setOnClickListener { dialog.dismiss() }
 
@@ -1010,6 +1016,7 @@ class MainActivity : AppCompatActivity() {
             showSettingsMenuDialog()
         }
     }
+
 
     private fun showUserDetailsDialog() {
         val dialog = createDialog(R.layout.profile_userdetails)

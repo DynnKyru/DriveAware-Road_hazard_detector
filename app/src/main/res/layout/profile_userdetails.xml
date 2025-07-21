@@ -93,15 +93,16 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:gravity="start"
             android:text="Name"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:layout_weight="1"
-            android:gravity="start"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- Name Field -->
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutNamefield"
         android:background="@drawable/border_rounded"
         android:layout_marginBottom="5dp"
@@ -111,16 +112,16 @@
         android:padding="1dp"
         android:gravity="center_vertical">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextName"
-            android:layout_width="0dp"
+            android:layout_width="367dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:background="@drawable/border_rounded_gray"
+            android:elevation="0dp"
             android:hint="Enter Name"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
-            android:elevation="0dp" />
-    </LinearLayout>
+            android:padding="12dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <!-- Email Address Text -->
@@ -140,6 +141,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="4dp"
             android:text="Email Address"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:layout_weight="1"
@@ -147,9 +149,8 @@
 
     </LinearLayout>
     <!-- Email Address Field -->
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutEmailfield"
-        android:background="@drawable/border_rounded"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -157,17 +158,17 @@
         android:gravity="center_vertical">
 
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextEmail"
-            android:layout_width="0dp"
+            android:layout_width="366dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="Enter Email"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
+            android:background="@drawable/border_rounded_gray"
             android:elevation="0dp"
-            android:inputType="textEmailAddress"/>
-    </LinearLayout>
+            android:hint="Enter Email"
+            android:inputType="textEmailAddress"
+            android:padding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Text -->
     <LinearLayout
@@ -187,6 +188,7 @@
             android:layout_marginBottom="4dp"
             android:text="Password"
             android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="start"/>
@@ -194,28 +196,28 @@
 
     </LinearLayout>
     <!-- Password Field -->
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutPassword"
-        android:background="@drawable/border_rounded"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
         android:padding="1dp"
         android:gravity="center_vertical">
 
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPassword"
-            android:layout_width="0dp"
+            android:layout_width="369dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:background="@drawable/border_rounded_gray"
             android:hint="Enter Password"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
             android:elevation="0dp"
-            android:inputType="textPassword"/>
-    </LinearLayout>
+            android:inputType="textPassword"
+            android:padding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Change Password Text -->
     <LinearLayout
@@ -235,16 +237,17 @@
             android:layout_marginBottom="4dp"
             android:text="Change Password"
             android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="16sp"
             android:layout_weight="1"
             android:gravity="start"/>
 
     </LinearLayout>
     <!-- Change Password Field -->
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutChangepasswordfield"
         android:background="@drawable/border_rounded"
-
+        app:passwordToggleEnabled="true"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -252,18 +255,17 @@
         android:gravity="center_vertical">
 
 
-
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextChangePassword"
-            android:layout_width="0dp"
+            android:layout_width="367dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="Change Password"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
+            android:background="@drawable/border_rounded_gray"
             android:elevation="0dp"
-            android:inputType="textPassword"/>
-    </LinearLayout>
+            android:hint="Change Password"
+            android:inputType="textPassword"
+            android:padding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Buttons Row -->
     <LinearLayout

@@ -42,10 +42,12 @@
             android:id="@+id/cancelMenuButton"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="86dp"
             android:src="@drawable/ic_exit" />
 
     </LinearLayout>
+
+
 
     <!-- Profile Container -->
     <LinearLayout
@@ -107,6 +109,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="1dp"
+        android:paddingBottom="2dp"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
         android:gravity="center_vertical">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -116,9 +121,11 @@
             android:layout_weight="2"
             android:background="@drawable/border_rounded_gray"
             android:elevation="0dp"
-            android:hint="Enter Name"
-            android:padding="12dp"/>
+            android:hint="Name"
+            android:padding="18dp"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
     <!-- Email Address Text -->
@@ -148,10 +155,14 @@
     <!-- Email Address Field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutEmailfield"
+        android:background="@drawable/border_rounded"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="1dp"
+        android:paddingBottom="2dp"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
         android:gravity="center_vertical">
 
 
@@ -159,12 +170,12 @@
             android:id="@+id/editTextEmail"
             android:layout_width="366dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="8"
             android:background="@drawable/border_rounded_gray"
             android:elevation="0dp"
             android:hint="Enter Email"
             android:inputType="textEmailAddress"
-            android:padding="12dp" />
+            android:padding="18dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Text -->
@@ -195,12 +206,14 @@
     <!-- Password Field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutPassword"
-        android:layout_marginBottom="5dp"
+        android:background="@drawable/border_rounded"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:passwordToggleEnabled="true"
         android:padding="1dp"
+        android:paddingBottom="2dp"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
         android:gravity="center_vertical">
 
 
@@ -213,7 +226,7 @@
             android:hint="Enter Password"
             android:elevation="0dp"
             android:inputType="textPassword"
-            android:padding="12dp" />
+            android:padding="18dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Change Password Text -->
@@ -244,11 +257,13 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutChangepasswordfield"
         android:background="@drawable/border_rounded"
-        app:passwordToggleEnabled="true"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="1dp"
+        android:paddingBottom="2dp"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
         android:gravity="center_vertical">
 
 
@@ -261,7 +276,7 @@
             android:elevation="0dp"
             android:hint="Change Password"
             android:inputType="textPassword"
-            android:padding="12dp" />
+            android:padding="18dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Buttons Row -->
@@ -286,10 +301,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Clear"
-                android:backgroundTint="@color/white"
+                android:background="@android:color/transparent"
                 android:textColor="@android:color/black"
-                android:padding="10dp"
-                android:elevation="0dp" />
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:padding="10dp" />
         </androidx.cardview.widget.CardView>
 
         <View
@@ -310,10 +326,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Change"
-                android:backgroundTint="@color/white"
+                android:background="@android:color/transparent"
                 android:textColor="@android:color/black"
-                android:padding="10dp"
-                android:elevation="0dp" />
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:padding="10dp" />
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>

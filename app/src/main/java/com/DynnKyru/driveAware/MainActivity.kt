@@ -784,6 +784,7 @@ class MainActivity : AppCompatActivity() {
         dialog.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.windowAnimations = R.style.DialogAnimation
             setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -795,7 +796,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showSettingsMenuDialog() {
         val dialog = createDialog(R.layout.settings)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val alertModeLayout: LinearLayout? = dialog.findViewById(R.id.layoutAlertMode)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
@@ -842,7 +842,6 @@ class MainActivity : AppCompatActivity() {
     }
     private fun showHelpdialog() {
         val dialog = createDialog(R.layout.help)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
         val helpCamera: LinearLayout? = dialog.findViewById(R.id.HelpCameraLayout)
@@ -881,7 +880,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpCameraActivity() {
         val dialog = createDialog(R.layout.help_cameractivity)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -896,7 +894,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpsettings() {
         val dialog = createDialog(R.layout.help_settings)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 
@@ -911,7 +908,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHelpprofile() {
         val dialog = createDialog(R.layout.help_profile)
-        dialog.window?.apply{attributes.windowAnimations = R.style.DialogAnimation}
         val backButton: ImageView? = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView? = dialog.findViewById(R.id.cancelMenuButton)
 

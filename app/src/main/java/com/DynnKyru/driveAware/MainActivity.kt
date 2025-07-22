@@ -1149,7 +1149,10 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showSettingsMenuDialog()
         }
-        cancelMenuButton.setOnClickListener { dialog.dismiss() }
+        cancelMenuButton.setOnClickListener {
+            dialog.dismiss()
+            showSettingsMenuDialog()
+        }
 
         dialog.show()
     }
@@ -1363,9 +1366,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        backButton.setOnClickListener { dialog.dismiss() }
-        cancelMenuButton.setOnClickListener { dialog.dismiss() }
-        topCenterButton.setOnClickListener { dialog.dismiss() }
+        backButton.setOnClickListener {
+            dialog.dismiss()
+            showReportMenuDialog()
+        }
+        cancelMenuButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        topCenterButton.setOnClickListener {
+            dialog.dismiss()
+        }
         viewSuggestedButton.setOnClickListener {
             Toast.makeText(dialog.context, "Viewing Suggested Reports", Toast.LENGTH_SHORT).show()
         }

@@ -1,4 +1,3 @@
-// ✅ Updated Detector.kt with Alert Mode filtering support
 package com.DynnKyru.driveAware
 
 import android.content.Context

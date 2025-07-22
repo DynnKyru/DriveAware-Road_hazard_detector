@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
@@ -37,7 +37,8 @@
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_exit"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="4dp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -92,7 +93,7 @@
         <!-- Text Info Column -->
         <!-- Text Info Column -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -101,53 +102,53 @@
                 android:id="@+id/typeofhazard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Type of Hazard"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:layout_marginBottom="4dp"
                 android:background="@android:drawable/editbox_background"
-                android:textColor="#000000"/>
+                android:hint="Type of Hazard"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Location"
-                android:textSize="14sp"
                 android:layout_marginBottom="4dp"
+                android:background="@android:drawable/editbox_background"
+                android:hint="Location"
                 android:textColor="#000000"
-                android:background="@android:drawable/editbox_background" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Time"
-                android:textSize="14sp"
                 android:layout_marginBottom="4dp"
+                android:background="@android:drawable/editbox_background"
+                android:hint="Time"
                 android:textColor="#000000"
-                android:background="@android:drawable/editbox_background" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
                 android:hint="Date"
-                android:textSize="14sp"
                 android:textColor="#000000"
-                android:background="@android:drawable/editbox_background" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- ImageView on the right -->
         <ImageView
             android:id="@+id/reportImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/border_rect"
-            android:scaleType="centerCrop"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:scaleType="centerCrop">
 
         </ImageView>
     </LinearLayout>

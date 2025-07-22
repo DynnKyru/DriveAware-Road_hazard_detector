@@ -575,7 +575,6 @@ class MainActivity : AppCompatActivity() {
 
     fun onEmptyDetect() {
         runOnUiThread {
-            hideNotification()
             binding.overlay.apply {
                 setResults(emptyList()) // Clear bounding boxes
                 invalidate() // Redraw overlay
@@ -605,13 +604,13 @@ class MainActivity : AppCompatActivity() {
         notificationBanner.alpha = 0f
         notificationBanner.visibility = View.VISIBLE
 
+
         notificationBanner.apply {
             scaleX = 0.7f
             scaleY = 0.7f
             alpha = 0f
             visibility = View.VISIBLE
         }
-
         notificationBanner.animate()
             .alpha(1f)
             .scaleX(1f)
@@ -621,16 +620,17 @@ class MainActivity : AppCompatActivity() {
             .withEndAction {
                 notificationBanner.postDelayed({
                     hideNotification()
-                }, 4000)
+                }, 2000)
             }
             .start()
     }
 
     private fun hideNotification() {
+        if (notificationBanner.visibility != View.VISIBLE) return
         //bannersssgrgrgr
         notificationBanner.animate()
-            .alpha(1f)
-            .setDuration(6000)
+            .alpha(0f)
+            .setDuration(1000)
             .withEndAction {
                 notificationBanner.visibility = View.GONE
             }
@@ -1149,7 +1149,10 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
             showSettingsMenuDialog()
         }
-        cancelMenuButton.setOnClickListener { dialog.dismiss() }
+        cancelMenuButton.setOnClickListener {
+            dialog.dismiss()
+            showSettingsMenuDialog()
+        }
 
         dialog.show()
     }
@@ -1363,9 +1366,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        backButton.setOnClickListener { dialog.dismiss() }
-        cancelMenuButton.setOnClickListener { dialog.dismiss() }
-        topCenterButton.setOnClickListener { dialog.dismiss() }
+        backButton.setOnClickListener {
+            dialog.dismiss()
+            showReportMenuDialog()
+        }
+        cancelMenuButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        topCenterButton.setOnClickListener {
+            dialog.dismiss()
+        }
         viewSuggestedButton.setOnClickListener {
             Toast.makeText(dialog.context, "Viewing Suggested Reports", Toast.LENGTH_SHORT).show()
         }

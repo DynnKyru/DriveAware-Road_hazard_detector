@@ -574,7 +574,6 @@ class MainActivity : AppCompatActivity() {
 
     fun onEmptyDetect() {
         runOnUiThread {
-            hideNotification()
             binding.overlay.apply {
                 setResults(emptyList()) // Clear bounding boxes
                 invalidate() // Redraw overlay

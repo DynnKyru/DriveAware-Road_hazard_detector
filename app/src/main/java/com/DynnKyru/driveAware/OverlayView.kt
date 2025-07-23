@@ -8,7 +8,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 
-class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+class  OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private var results = listOf<BoundingBox>()
     private var boxPaint = Paint()

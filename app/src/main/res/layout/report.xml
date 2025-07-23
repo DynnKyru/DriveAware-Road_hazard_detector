@@ -27,14 +27,6 @@
             android:src="@drawable/back_arrow" />
 
         <!-- Top Center Button -->
-        <ImageView
-            android:id="@+id/topCenterButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:backgroundTint="@color/black"
-            android:src="@drawable/ic_round_remove_24"
-            android:scaleType="centerCrop" />
 
         <!-- Cancel (X) Button on Right -->
         <ImageView

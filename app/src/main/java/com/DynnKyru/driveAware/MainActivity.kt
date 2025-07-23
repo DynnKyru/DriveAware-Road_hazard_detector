@@ -1047,7 +1047,6 @@ class MainActivity : AppCompatActivity() {
         // Top buttons
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
-        val topCenterButton: ImageView = dialog.findViewById(R.id.topCenterButton)
 
         // Info TextViews
         val hazardTypeText: TextView = dialog.findViewById(R.id.typeofhazard)
@@ -1182,7 +1181,6 @@ class MainActivity : AppCompatActivity() {
         // Top Buttons
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
-        val topCenterButton: ImageView = dialog.findViewById(R.id.topCenterButton)
 
         // Info Fields
         val roadTypeText: TextView = dialog.findViewById(R.id.Roadtype)
@@ -1215,9 +1213,6 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        topCenterButton.setOnClickListener {
-            dialog.dismiss()
-        }
 
         checkButton.setOnClickListener {
             saveReportToFirebase(hazardType, location, date, time, imageBitmap)
@@ -1322,7 +1317,6 @@ class MainActivity : AppCompatActivity() {
 
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
-        val topCenterButton: ImageView = dialog.findViewById(R.id.topCenterButton)
         val viewSuggestedButton: Button = dialog.findViewById(R.id.viewSuggestedButton)
         val historyContainer = dialog.findViewById<LinearLayout>(R.id.historyContainer)
 
@@ -1368,7 +1362,6 @@ class MainActivity : AppCompatActivity() {
         backButton.setOnClickListener { dialog.dismiss()
             showReportMenuDialog() }
         cancelMenuButton.setOnClickListener { dialog.dismiss() }
-        topCenterButton.setOnClickListener { dialog.dismiss() }
         viewSuggestedButton.setOnClickListener {
             Toast.makeText(dialog.context, "Viewing Suggested Reports", Toast.LENGTH_SHORT).show()
         }

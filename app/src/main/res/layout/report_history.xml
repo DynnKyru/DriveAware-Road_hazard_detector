@@ -14,15 +14,6 @@
         android:padding="8dp">
 
         <ImageView
-            android:id="@+id/topCenterButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:backgroundTint="@color/black"
-            android:src="@drawable/ic_round_remove_24"
-            android:scaleType="centerCrop" />
-
-        <ImageView
             android:id="@+id/Backbutton"
             android:layout_width="30dp"
             android:layout_height="40dp"
@@ -36,7 +27,6 @@
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="25dp"
             android:src="@drawable/ic_exit" />
     </RelativeLayout>
 

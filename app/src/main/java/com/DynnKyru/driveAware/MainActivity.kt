@@ -277,14 +277,13 @@ class MainActivity : AppCompatActivity() {
                 selectedReportBitmap = BitmapFactory.decodeStream(inputStream)
                 inputStream?.close()
 
-                // ✅ Add this log line
+                // Add this log line
                 Log.d("ImagePicker", "Bitmap set? ${selectedReportBitmap != null}")
             } catch (e: Exception) {
                 Log.e("ImagePicker", "Failed to decode bitmap: ${e.message}", e)
             }
         }
     }
-
 
     private val profileImagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -366,7 +365,7 @@ class MainActivity : AppCompatActivity() {
 
         val now = System.currentTimeMillis()
         if (now - lastMarkerTime < 5000) {
-            Log.d("RedMarkerThrottle", "⏳ Skipping red marker — still in cooldown")
+            Log.d("RedMarkerThrottle", " Skipping red marker — still in cooldown")
             return
         }
         lastMarkerTime = now
@@ -394,7 +393,7 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 detectionRecords.add(record)
-                Log.d("DetectionLog", "🆕 Red marker added at: $jitteredLat, $jitteredLon")
+                Log.d("DetectionLog", " Red marker added at: $jitteredLat, $jitteredLon")
             }
 
         } else {
@@ -406,7 +405,7 @@ class MainActivity : AppCompatActivity() {
                 timestamp = timestamp
             )
             detectionRecords.add(record)
-            Log.w("DetectionLog", "⚠️ Detection saved without GPS")
+            Log.w("DetectionLog", " Detection saved without GPS")
         }
     }
 
@@ -557,7 +556,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun vibratePhone() {
-        if (!isNotificationEnabled) return // 🚨 Stop vibration if notifications are off
+        if (!isNotificationEnabled) return // Stop vibration if notifications are off
 
         val vibrator = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             val vibratorManager = getSystemService(VibratorManager::class.java)
@@ -738,7 +737,7 @@ class MainActivity : AppCompatActivity() {
         val lat = sharedPreferences.getFloat(LAT_KEY, 14.5995f) // Default to Manila
         val lon = sharedPreferences.getFloat(LON_KEY, 120.9842f)
         // Set initial user location
-        MapManager.clearSearchState()  // 👈 Add this right before setupMap
+        MapManager.clearSearchState()  // Add this right before setupMap
         loadReportedDetectionsFromFirebase {
             MapManager.setupMap(this, mapView, lat.toDouble(), lon.toDouble(), detectionRecords)
         }
@@ -1048,7 +1047,6 @@ class MainActivity : AppCompatActivity() {
         // Top buttons
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
-        val topCenterButton: ImageView = dialog.findViewById(R.id.topCenterButton)
 
         // Info TextViews
         val hazardTypeText: TextView = dialog.findViewById(R.id.typeofhazard)
@@ -1183,7 +1181,6 @@ class MainActivity : AppCompatActivity() {
         // Top Buttons
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
-        val topCenterButton: ImageView = dialog.findViewById(R.id.topCenterButton)
 
         // Info Fields
         val roadTypeText: TextView = dialog.findViewById(R.id.Roadtype)
@@ -1216,9 +1213,6 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        topCenterButton.setOnClickListener {
-            dialog.dismiss()
-        }
 
         checkButton.setOnClickListener {
             saveReportToFirebase(hazardType, location, date, time, imageBitmap)
@@ -1323,7 +1317,6 @@ class MainActivity : AppCompatActivity() {
 
         val backButton: ImageView = dialog.findViewById(R.id.Backbutton)
         val cancelMenuButton: ImageView = dialog.findViewById(R.id.cancelMenuButton)
-        val topCenterButton: ImageView = dialog.findViewById(R.id.topCenterButton)
         val viewSuggestedButton: Button = dialog.findViewById(R.id.viewSuggestedButton)
         val historyContainer = dialog.findViewById<LinearLayout>(R.id.historyContainer)
 
@@ -1366,24 +1359,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        backButton.setOnClickListener {
-            dialog.dismiss()
-            showReportMenuDialog()
-        }
-        cancelMenuButton.setOnClickListener {
-            dialog.dismiss()
-        }
-        topCenterButton.setOnClickListener {
-            dialog.dismiss()
-        }
+        backButton.setOnClickListener { dialog.dismiss()
+            showReportMenuDialog() }
+        cancelMenuButton.setOnClickListener { dialog.dismiss() }
         viewSuggestedButton.setOnClickListener {
             Toast.makeText(dialog.context, "Viewing Suggested Reports", Toast.LENGTH_SHORT).show()
         }
-
         dialog.show()
     }
-
-
 
     fun Alertswitch(view: View) {
         val switch = view as Switch

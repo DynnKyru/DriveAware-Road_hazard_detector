@@ -1365,24 +1365,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        backButton.setOnClickListener {
-            dialog.dismiss()
-            showReportMenuDialog()
-        }
-        cancelMenuButton.setOnClickListener {
-            dialog.dismiss()
-        }
-        topCenterButton.setOnClickListener {
-            dialog.dismiss()
-        }
+        backButton.setOnClickListener { dialog.dismiss()
+            showReportMenuDialog() }
+        cancelMenuButton.setOnClickListener { dialog.dismiss() }
+        topCenterButton.setOnClickListener { dialog.dismiss() }
         viewSuggestedButton.setOnClickListener {
             Toast.makeText(dialog.context, "Viewing Suggested Reports", Toast.LENGTH_SHORT).show()
         }
-
         dialog.show()
     }
-
-
 
     fun Alertswitch(view: View) {
         val switch = view as Switch

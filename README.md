@@ -1,6 +1,6 @@
 DriveAware: Road hazard detector using YOLOv9 model
 
 Description
-This Android application is designed to perform live object detection using the YOLOv9 machine learning model.
-YOLOv9 (You Only Look Once version 9) is known for its real-time object detection capabilities, 
-and this app brings that functionality to Android devices.
+By leveraging advanced deep learning techniques and on-device computer vision,
+DriveAware demonstrates the feasibility of deploying real-time, 
+AI-driven hazard detection systems on consumer-grade mobile platforms.
